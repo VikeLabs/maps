@@ -1,3 +1,4 @@
+import ca.vikelabs.maps.application
 import com.natpryce.hamkrest.assertion.assertThat
 import org.http4k.core.Method
 import org.http4k.core.Request
