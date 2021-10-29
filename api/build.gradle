@@ -1,0 +1,26 @@
+plugins {
+    id "org.jetbrains.kotlin.jvm" version "1.5.31"
+}
+
+group 'ca.vikelabs'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation group: "org.http4k", name: "http4k-core", version: "4.16.2.0"
+    testImplementation group: "org.jetbrains.kotlin", name: "kotlin-test-junit5"
+    testImplementation group: "org.http4k", name: "http4k-testing-hamkrest", version: "4.16.2.0"
+}
+
+compileKotlin {
+    kotlinOptions {
+        allWarningsAsErrors = true
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
