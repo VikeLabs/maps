@@ -1,0 +1,11 @@
+plugins {
+    id "com.moowork.node" version "1.3.1"
+}
+
+task npmBuild(type: NpmTask, dependsOn: npmInstall) {
+    args = ['run', 'build']
+}
+
+task test(type: NpmTask, dependsOn: npmInstall) {
+    args = ['run', 'test', '--', '--watchAll=false']
+}
