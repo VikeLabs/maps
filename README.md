@@ -22,3 +22,10 @@ or `gradlew api:test`
 
 You can build both projects (producing an optimized app and a jar file) with `gradlew build`. Similar to testing and
 running, you can build the individual projects with `gradlew app:build` and `gradlew api:build` 
+
+### Some notes on gradle
+
+You can of cource run everything here *without* gradle, you may want to directly run `npm` commands for example. I would
+recommend against it as there is a carfully curated dependancy graph for tasks with gradle whereas for npm you are on your
+own. As a result of this if any mentioned gradle commands fail for any reason beyond broken code, that is a bug and should be filed 
+as such
