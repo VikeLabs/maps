@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(JsonApprovalTest::class)
-internal class PingTest {
+class PingTest {
     private val pingRoute = ping()
     private val request = Request(Method.GET, "/ping")
     private val response = pingRoute(request)
