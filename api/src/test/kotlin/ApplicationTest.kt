@@ -14,14 +14,7 @@ import kotlin.test.assertTrue
 
 class ApplicationTest {
     @Test
-    internal fun `test tests working as expected`() {
+    fun `check tests working`() {
         assertTrue(true, "something especially poor has occurred")
-    }
-
-    @Test
-    internal fun `test swagger returns json documentation`() {
-        val response = application(Request(Method.GET, "/swagger.json"))
-        assertThat(response, hasStatus(Status.OK))
-        assertThat(response, hasContentType(ContentType.APPLICATION_JSON))
     }
 }
