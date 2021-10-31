@@ -4,4 +4,5 @@ COPY --chown=gradle:gradle ./api /home/gradle/src/
 WORKDIR /home/gradle/src
 RUN gradle build
 RUN gradle test
+EXPOSE 8000:8000
 CMD ["gradle", "run"]
