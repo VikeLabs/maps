@@ -3,7 +3,7 @@
 # maps
 
 This is a [VikeLabs](https://www.vikelabs.ca/) project meant for navigating around UVic. It's structured as a
-multi-module gradle project with an api server and a web app (in `api` and `app` respectivly). You can find out more
+multi-module gradle project with an api server and a web app (in `api` and `app` respectively). You can find out more
 about the details of those modules in their respective `README.md`'s.
 
 ## Running
@@ -25,12 +25,12 @@ running, you can build the individual projects with `gradlew app:build` and `gra
 
 ## Deploying
 
-Two two Dockerfiles (`api.Dockerfile` and `app.Dockerfile`) are tested every push. They run optimized builds and as a result are
-the best way to deploy the app in a long running environment.
+Two Dockerfiles (`api.Dockerfile` and `app.Dockerfile`) are tested every push. They run optimized builds and as a result are
+the best way to deploy the app in a long-running environment.
 
 ### Some notes on gradle
 
-You can of cource run everything here *without* gradle, you may want to directly run `npm` commands for example. I would
-recommend against it as there is a carfully curated dependancy graph for tasks with gradle whereas for npm you are on your
+You can of course run everything here *without* gradle, you may want to directly run `npm` commands for example. I would
+recommend against it as there is a carefully curated dependency graph for tasks with gradle whereas for npm you are on your
 own. As a result of this if any mentioned gradle commands fail for any reason beyond broken code, that is a bug and should be filed 
 as such
