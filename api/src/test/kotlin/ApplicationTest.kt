@@ -9,7 +9,7 @@ import org.http4k.format.Jackson
 import org.http4k.hamkrest.hasContentType
 import org.http4k.hamkrest.hasStatus
 import org.junit.jupiter.api.Test
-import kotlin.io.path.Path
+import java.io.FileNotFoundException
 import kotlin.test.assertTrue
 
 class ApplicationTest {
@@ -28,7 +28,8 @@ class ApplicationTest {
     @Test
     internal fun `test OpenApi is up to date`() {
         val currentOpenApiSpec = application(Request(Method.GET, "/swagger.json")).bodyString()
-        val fileOpenApiSpec = Path("src/main/resources/swagger.json").toFile().readText()
+        val fileOpenApiSpec = object {}::class.java.getResource("swagger.json")?.readText()
+            ?: throw FileNotFoundException("could not find \"swagger.json\" in resources")
         assertThat(Jackson.parse(currentOpenApiSpec), equalTo(Jackson.parse(fileOpenApiSpec)))
     }
 }
