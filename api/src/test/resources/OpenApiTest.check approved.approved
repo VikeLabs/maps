@@ -1,0 +1,67 @@
+{
+  "info": {
+    "title": "map uvic",
+    "version": "0.0.1",
+    "description": "An API for navigating around the University of Victoria."
+  },
+  "tags": [
+  ],
+  "paths": {
+    "/ping": {
+      "get": {
+        "summary": "Returns 200 OK and a small json object describing the server status",
+        "description": "A handy endpoint for checking to see weather the server is alive and replying",
+        "tags": [
+          ""
+        ],
+        "parameters": [
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/PingResponse",
+                  "example": null,
+                  "description": null
+                }
+              }
+            }
+          }
+        },
+        "security": [
+        ],
+        "operationId": "getPing",
+        "deprecated": false
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PingResponse": {
+        "properties": {
+          "success": {
+            "example": true,
+            "description": null,
+            "type": "boolean"
+          }
+        },
+        "example": {
+          "success": true
+        },
+        "description": null,
+        "type": "object",
+        "required": [
+          "success"
+        ]
+      }
+    },
+    "securitySchemes": {
+    }
+  },
+  "openapi": "3.0.0"
+}

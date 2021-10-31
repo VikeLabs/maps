@@ -24,12 +24,4 @@ class ApplicationTest {
         assertThat(response, hasStatus(Status.OK))
         assertThat(response, hasContentType(ContentType.APPLICATION_JSON))
     }
-
-    @Test
-    internal fun `test OpenApi is up to date`() {
-        val currentOpenApiSpec = application(Request(Method.GET, "/swagger.json")).bodyString()
-        val fileOpenApiSpec = object {}::class.java.getResource("swagger.json")?.readText()
-            ?: throw FileNotFoundException("could not find \"swagger.json\" in resources")
-        assertThat(Jackson.parse(currentOpenApiSpec), equalTo(Jackson.parse(fileOpenApiSpec)))
-    }
 }

@@ -22,6 +22,7 @@ dependencies {
     implementation group: "org.http4k", name: "http4k-format-jackson"
 
     testImplementation group: "org.jetbrains.kotlin", name: "kotlin-test-junit5"
+    testImplementation group: "org.http4k", name: "http4k-testing-approval"
     testImplementation group: "org.http4k", name: "http4k-testing-hamkrest"
 }
 
