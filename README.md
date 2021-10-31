@@ -18,10 +18,15 @@ then run the frontend `app`.
 You can test everything at once with `gradlew test`. Or individual projects with `gradlew app:test`
 or `gradlew api:test`
 
-## Building / Deploying
+## Building
 
 You can build both projects (producing an optimized app and a jar file) with `gradlew build`. Similar to testing and
 running, you can build the individual projects with `gradlew app:build` and `gradlew api:build` 
+
+## Deploying
+
+Two two Dockerfiles (`api.Dockerfile` and `app.Dockerfile`) are tested every push. They run optimized builds and as a result are
+the best way to deploy the app in a long running environment.
 
 ### Some notes on gradle
 
