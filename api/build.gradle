@@ -17,6 +17,9 @@ repositories {
 
 dependencies {
     implementation group: "org.http4k", name: "http4k-core", version: "4.16.2.0"
+    implementation group: "org.http4k", name: "http4k-contract", version: "4.16.2.0"
+    implementation group: "org.http4k", name: "http4k-format-jackson", version: "4.16.2.0"
+
     testImplementation group: "org.jetbrains.kotlin", name: "kotlin-test-junit5"
     testImplementation group: "org.http4k", name: "http4k-testing-hamkrest", version: "4.16.2.0"
 }

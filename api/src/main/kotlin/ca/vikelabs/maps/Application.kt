@@ -1,19 +1,31 @@
 package ca.vikelabs.maps
 
+import ca.vikelabs.maps.routes.ping
+import org.http4k.contract.contract
+import org.http4k.contract.openapi.ApiInfo
+import org.http4k.contract.openapi.v3.OpenApi3
 import org.http4k.core.HttpHandler
-import org.http4k.core.Request
-import org.http4k.core.Response
-import org.http4k.core.Status
+import org.http4k.format.Jackson
+import org.http4k.routing.bind
+import org.http4k.routing.routes
 import org.http4k.server.SunHttp
 import org.http4k.server.asServer
 
-val application: HttpHandler = { _: Request ->
-    Response(Status.OK)
+
+val rootContract = contract {
+    renderer = OpenApi3(
+        apiInfo = ApiInfo("map uvic", "0.0.1", "An API for navigating around the University of Victoria."),
+        Jackson
+    )
+    descriptionPath = "/swagger.json"
+    routes += ping()
 }
 
+val ping: HttpHandler = routes("/" bind rootContract)
+
 fun main() {
-    val server = application.asServer(SunHttp())
+    val server = ping.asServer(SunHttp())
     server.start()
-    println("server started and running on ${server.port()}")
+    println("Server started and running on ${server.port()}.")
     server.block()
 }
