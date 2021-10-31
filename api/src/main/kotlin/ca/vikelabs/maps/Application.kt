@@ -21,10 +21,10 @@ val rootContract = contract {
     routes += ping()
 }
 
-val ping: HttpHandler = routes("/" bind rootContract)
+val application: HttpHandler = routes("/" bind rootContract)
 
 fun main() {
-    val server = ping.asServer(SunHttp())
+    val server = application.asServer(SunHttp())
     server.start()
     println("Server started and running on ${server.port()}.")
     server.block()
