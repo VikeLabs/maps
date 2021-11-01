@@ -5,7 +5,7 @@ import org.http4k.contract.meta
 import org.http4k.core.*
 import org.http4k.format.Jackson.auto
 
-class PingResponse(val success: Boolean = true)
+data class PingResponse(val success: Boolean = true)
 
 fun ping(): ContractRoute {
     val body = Body.auto<PingResponse>().toLens()
