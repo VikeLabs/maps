@@ -23,6 +23,13 @@ task run(type: NpmTask) {
     args = ['run', 'start']
 }
 
+task build {
+    dependsOn {
+        npmInstall
+        generateClient
+    }
+}
+
 task npmBuild(type: NpmTask) {
     dependsOn {
         npmInstall
