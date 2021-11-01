@@ -1,3 +1,5 @@
+package ca.vikelabs.maps
+
 import org.junit.jupiter.api.Test
 import kotlin.test.assertTrue
 

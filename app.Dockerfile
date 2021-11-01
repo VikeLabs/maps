@@ -1,7 +1,7 @@
 FROM node:16.13.0-alpine
 WORKDIR /home/app
 COPY ./app /home/app
-COPY ["api/src/test/resources/OpenApiTest.check approved.approved", "/home/api/src/test/resources/OpenApiTest.check approved.approved"]
+COPY ["api/src/test/resources/ca/vikelabs/maps/OpenApiTest.check approved.approved", "/home/api/src/test/resources/ca/vikelabs/maps/OpenApiTest.check approved.approved"]
 RUN npm install
 RUN npm run generate
 RUN npm run test -- --watchAll=false
