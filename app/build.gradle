@@ -20,7 +20,7 @@ task run(type: NpmTask) {
         npmInstall
         generateClient
     }
-    args = ['run', 'start']
+    args = ['run', 'dev']
 }
 
 task build {

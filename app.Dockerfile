@@ -6,7 +6,6 @@ RUN npm install
 RUN npm run generate
 RUN npm run test -- --watchAll=false
 RUN npm run build
-EXPOSE 3000:3000
-RUN npm install -g serve
-HEALTHCHECK CMD curl --fail http://localhost:3000 || exit 1
-CMD npx serve -l 3000 build
+EXPOSE 5000:5000
+HEALTHCHECK CMD curl --fail http://localhost:5000 || exit 1
+CMD ["npm", "run", "start"]
