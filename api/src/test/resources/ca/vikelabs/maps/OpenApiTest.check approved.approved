@@ -9,8 +9,8 @@
   "paths": {
     "/ping": {
       "get": {
-        "summary": "Returns 200 OK and a small json object describing the server status",
-        "description": "A handy endpoint for checking to see weather the server is alive and replying",
+        "summary": "Returns 200 OK and a small json object describing the server status.",
+        "description": "A handy endpoint for checking to see weather the server is alive and replying.",
         "tags": [
           ""
         ],
@@ -25,7 +25,7 @@
                   "success": true
                 },
                 "schema": {
-                  "$ref": "#/components/schemas/PingResponse",
+                  "$ref": "#/components/schemas/Success",
                   "example": null,
                   "description": null
                 }
@@ -42,7 +42,7 @@
   },
   "components": {
     "schemas": {
-      "PingResponse": {
+      "Success": {
         "properties": {
           "success": {
             "example": true,
