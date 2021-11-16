@@ -1,5 +1,3 @@
 package ca.vikelabs.maps.opensteetmaps
 
-interface MapFetcher {
-
-}
+interface MapData
