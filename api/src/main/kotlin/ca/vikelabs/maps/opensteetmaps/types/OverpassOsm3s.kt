@@ -1,6 +1,5 @@
 package ca.vikelabs.maps.opensteetmaps.types
 
-
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class OverpassOsm3s(

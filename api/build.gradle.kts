@@ -1,10 +1,15 @@
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.5.31"
-    id("application")
+    kotlin("jvm") version "1.6.0"
+    application
 }
 
 group = "ca.vikelabs"
 version = "1.0-SNAPSHOT"
+
+application {
+    applicationName = "maps"
+    mainClass.set("$group.maps.MainKt")
+}
 
 repositories {
     mavenCentral()

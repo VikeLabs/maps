@@ -10,7 +10,6 @@ import org.http4k.testing.JsonApprovalTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
-
 @ExtendWith(JsonApprovalTest::class)
 class OpenApiTest {
 
