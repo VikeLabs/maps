@@ -1,5 +1,5 @@
 FROM gradle:7.2.0-jdk11
-COPY --chown=gradle:gradle ./settings.gradle /home/gradle/src/
+COPY --chown=gradle:gradle settings.gradle.kts /home/gradle/src/
 COPY --chown=gradle:gradle ./api /home/gradle/src/
 WORKDIR /home/gradle/src
 RUN gradle build
