@@ -10,21 +10,22 @@ import org.http4k.testing.JsonApprovalTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
+
 @ExtendWith(JsonApprovalTest::class)
 class OpenApiTest {
 
     @Test
     fun `check approved`(approver: Approver) {
-        approver.assertApproved(application(Request(Method.GET, "/swagger.json")))
+        approver.assertApproved(application(Request(Method.GET, "/")))
     }
 
     @Test
-    fun `check swagger content type`() {
-        assertThat(application(Request(Method.GET, "/swagger.json")), hasStatus(Status.OK))
+    fun `check openapi content type`() {
+        assertThat(application(Request(Method.GET, "/")), hasStatus(Status.OK))
     }
 
     @Test
-    fun `check swagger status`() {
-        assertThat(application(Request(Method.GET, "/swagger.json")), hasStatus(Status.OK))
+    fun `check openapi status`() {
+        assertThat(application(Request(Method.GET, "/")), hasStatus(Status.OK))
     }
 }
