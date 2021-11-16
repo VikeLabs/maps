@@ -1,11 +1,10 @@
-FROM node:16.13.0-alpine
-WORKDIR /home/app
-COPY ./app /home/app
-COPY ["api/src/test/resources/ca/vikelabs/maps/OpenApiTest.check approved.approved", "/home/api/src/test/resources/ca/vikelabs/maps/OpenApiTest.check approved.approved"]
-RUN npm install
-RUN npm run generate
-RUN npm run test -- --watchAll=false
-RUN npm run build
+FROM gradle:7.2.0-jdk11
+COPY ["api/src/test/resources/ca/vikelabs/maps/OpenApiTest.check approved.approved", "/home/gradle/src/api/src/test/resources/ca/vikelabs/maps/OpenApiTest.check approved.approved"]
+COPY --chown=gradle:gradle settings.gradle.kts /home/gradle/src
+COPY --chown=gradle:gradle ./app /home/gradle/src/app
+WORKDIR /home/gradle/src
+RUN gradle app:build
+RUN gradle app:test
 EXPOSE 5000:5000
 HEALTHCHECK CMD curl --fail http://localhost:5000 || exit 1
-CMD ["npm", "run", "start"]
+CMD ["gradle", "app:run", "--console=plain"]
