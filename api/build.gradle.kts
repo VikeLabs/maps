@@ -34,4 +34,6 @@ tasks.withType<Test> {
         systemProperties["junit.jupiter.execution.parallel.mode.default"] = "concurrent"
         maxParallelForks = Runtime.getRuntime().availableProcessors() / 2
     }
+    reports.html.required.set(false)
+    reports.junitXml.required.set(false)
 }
