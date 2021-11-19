@@ -10,13 +10,13 @@ data class OverpassTags(
     @JsonProperty("alt_name")
     val altName: String?,
     @JsonProperty("building")
-    val building: String,
+    val building: String?,
     @JsonProperty("building:levels")
     val buildingLevels: String?,
     @JsonProperty("description")
     val description: String?,
     @JsonProperty("name")
-    val name: String,
+    val name: String?,
     @JsonProperty("old_name")
     val oldName: String?,
     @JsonProperty("source")
