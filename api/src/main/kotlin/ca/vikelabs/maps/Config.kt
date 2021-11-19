@@ -1,17 +1,30 @@
 package ca.vikelabs.maps
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import mu.KotlinLogging
 import java.nio.file.Path
 import kotlin.io.path.Path
 import kotlin.io.path.exists
 
-data class Config(val port: Int = 8000) {
-    companion object {
-        private val printMessageThenDefault: (message: String) -> Config = { println(it); Config() }
+private val logger = KotlinLogging.logger {}
 
+data class Config(val port: Int = 8000) {
+
+    object FailureHandlers {
+        val getLogAndDefault = fun(message: String): Config {
+            logger.warn { message }
+            logger.warn { "Using default config." }
+            return Config()
+        }
+        val throwWithMessage = fun(it: String): Nothing {
+            throw Exception("initialization of config failed with: $it")
+        }
+    }
+
+    companion object {
         fun fromArgs(
             args: Array<String>,
-            onFailure: (message: String) -> Config = printMessageThenDefault
+            onFailure: (message: String) -> Config = FailureHandlers.getLogAndDefault
         ): Config {
             val configPath = args
                 .asSequence()
@@ -21,15 +34,18 @@ data class Config(val port: Int = 8000) {
             return if (configPath != null) {
                 fromPath(Path(configPath.second), onFailure)
             } else {
-                onFailure("failed to find --config followed by a path")
+                onFailure("Failed to find \"--config\" followed by a path.")
             }
         }
 
-        private fun fromPath(path: Path, onFailure: (message: String) -> Config = printMessageThenDefault): Config {
+        fun fromPath(
+            path: Path,
+            onFailure: (message: String) -> Config = FailureHandlers.getLogAndDefault
+        ): Config {
             return if (path.exists()) {
                 ObjectMapper().readValue(path.toFile(), Config::class.java)
             } else {
-                onFailure("$path does not exist")
+                onFailure("\"$path\" does not exist")
             }
         }
     }
