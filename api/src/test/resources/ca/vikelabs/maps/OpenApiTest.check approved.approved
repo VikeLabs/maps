@@ -38,6 +38,36 @@
         "operationId": "getPing",
         "deprecated": false
       }
+    },
+    "/search": {
+      "get": {
+        "summary": "<unknown>",
+        "description": null,
+        "tags": [
+          ""
+        ],
+        "parameters": [
+        ],
+        "responses": {
+          "200": {
+            "description": "successful search",
+            "content": {
+              "application/json": {
+                "example": {
+                  "resultsFound": true
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/object-290561017"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+        ],
+        "operationId": "getSearch",
+        "deprecated": false
+      }
     }
   },
   "components": {
@@ -58,6 +88,17 @@
         "required": [
           "success"
         ]
+      },
+      "object-290561017": {
+        "type": "object",
+        "required": [
+        ],
+        "properties": {
+          "resultsFound": {
+            "type": "boolean",
+            "example": true
+          }
+        }
       }
     },
     "securitySchemes": {

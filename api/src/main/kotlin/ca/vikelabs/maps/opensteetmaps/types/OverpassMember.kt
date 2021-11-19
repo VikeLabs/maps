@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class OverpassMember(
     @JsonProperty("geometry")
-    val geometry: List<OverpassGeometry>,
+    val geometry: List<OverpassGeometry>?,
     @JsonProperty("ref")
     val ref: Int,
     @JsonProperty("role")
