@@ -5,6 +5,7 @@ import ca.vikelabs.maps.data.impl.OpenStreetMapsOverpassMapData
 import ca.vikelabs.maps.util.CachedNetworkTest
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
+import com.natpryce.hamkrest.greaterThanOrEqualTo
 import com.natpryce.hamkrest.has
 import org.http4k.core.Body
 import org.http4k.core.ContentType
@@ -49,7 +50,7 @@ class SearchTest : CachedNetworkTest(networkClient = null) {
     internal fun `check search for Elliott Building has results found`() {
         assertThat(
             searchHandler(Request(Method.GET, "/search?query=Elliott Building")),
-            hasBody(responseBodyLens, has("resultsFound", { it.resultsFound }, equalTo(true)))
+            hasBody(responseBodyLens, has("resultsFound", { it.resultsFound }, greaterThanOrEqualTo(1)))
         )
     }
 
@@ -57,7 +58,7 @@ class SearchTest : CachedNetworkTest(networkClient = null) {
     internal fun `check search for garbage does not have resultsFound`() {
         assertThat(
             searchHandler(Request(Method.GET, "/search?query=ouy3q4fuieafbui213")),
-            hasBody(responseBodyLens, has("resultsFound", { it.resultsFound }, equalTo(false)))
+            hasBody(responseBodyLens, has("resultsFound", { it.resultsFound }, equalTo(0)))
         )
     }
 
@@ -65,6 +66,14 @@ class SearchTest : CachedNetworkTest(networkClient = null) {
     internal fun `check search is case insensitive`() {
         assertThat(
             searchHandler(Request(Method.GET, "/search?query=Elliott Building")),
+            equalTo(searchHandler(Request(Method.GET, "/search?query=eLlioTT buiLdiNg")))
+        )
+    }
+
+    @Test
+    internal fun `check search works with levenshtein distance of one`() {
+        assertThat(
+            searchHandler(Request(Method.GET, "/search?query=Elliott Buiding")),
             equalTo(searchHandler(Request(Method.GET, "/search?query=eLlioTT buiLdiNg")))
         )
     }

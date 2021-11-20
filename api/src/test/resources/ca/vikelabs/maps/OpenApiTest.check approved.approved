@@ -54,10 +54,10 @@
             "content": {
               "application/json": {
                 "example": {
-                  "resultsFound": true
+                  "resultsFound": 1
                 },
                 "schema": {
-                  "$ref": "#/components/schemas/object-290561017"
+                  "$ref": "#/components/schemas/object2116370195"
                 }
               }
             }
@@ -89,14 +89,14 @@
           "success"
         ]
       },
-      "object-290561017": {
+      "object2116370195": {
         "type": "object",
         "required": [
         ],
         "properties": {
           "resultsFound": {
-            "type": "boolean",
-            "example": true
+            "type": "integer",
+            "example": 1
           }
         }
       }

@@ -3,7 +3,6 @@ package ca.vikelabs.maps
 import ca.vikelabs.maps.routes.ping
 import ca.vikelabs.maps.routes.search
 import mu.KotlinLogging
-import org.http4k.contract.ContractRoute
 import org.http4k.contract.contract
 import org.http4k.contract.openapi.ApiInfo
 import org.http4k.contract.openapi.v3.OpenApi3
