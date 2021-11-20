@@ -2,6 +2,7 @@ package ca.vikelabs.maps.data.impl
 
 import ca.vikelabs.maps.data.Building
 import ca.vikelabs.maps.data.MapData
+import ca.vikelabs.maps.opensteetmaps.types.OverpassElement
 import ca.vikelabs.maps.opensteetmaps.types.OverpassResponse
 import ca.vikelabs.maps.routes.Coordinate
 import mu.KotlinLogging
@@ -30,27 +31,32 @@ class OpenStreetMapsOverpassMapData(
         return overpassResponse.elements.mapNotNull { overpassElement ->
             val coords = when (overpassElement.type) {
                 "way" -> overpassElement.nodes
-                    ?.mapNotNull { node ->
-                        overpassResponse.elements.find { it.id == node }
+                    ?.mapNotNull { nodeRef -> overpassResponse.findElementByRef(nodeRef) }
+                    ?.map { Coordinate(it.lat!!, it.lon!!) }
+                "relation" -> {
+                    val outerWayRef = overpassElement.members?.find { it.role == "outer" && it.type == "way" }
+                        ?: return@mapNotNull null
+                    val outerWay = overpassResponse.findElementByRef(outerWayRef.ref)
+                        ?: return@mapNotNull null
+                    outerWay.members?.mapNotNull { wayNode ->
+                        overpassResponse
+                            .findElementByRef(wayNode.ref)
                             ?.let { Coordinate(it.lat!!, it.lon!!) }
                     }
-                "relation" ->
-                    overpassElement.members?.find { it.role == "outer" && it.type == "way" }?.let { outerWay ->
-                        outerWay.ref.let { ref ->
-                            overpassResponse.elements
-                                .find { it.id == ref.toLong() }
-                        }?.members
-                            ?.mapNotNull { member ->
-                                overpassResponse.elements.find { it.id == member.ref.toLong() }
-                                    ?.let { Coordinate(it.lat!!, it.lon!!) }
-                            }
-                    }
+                }
                 else -> null
             }
-            overpassElement.tags?.let { tags -> coords?.let { coords -> tags.name?.let { name -> Building(name, tags.abbrName, coords) } } }
+            val tags = overpassElement.tags ?: return@mapNotNull null
+            val name = tags.name ?: return@mapNotNull null
+            val nnCoords = coords ?: return@mapNotNull null
+            Building(name, tags.abbrName, nnCoords)
         }
     }
 }
+
+private fun OverpassResponse.findElementByRef(ref: Number): OverpassElement? =
+    this.elements.find { it.id == ref.toLong() }
+
 
 @JvmInline
 private value class OverpassQuery private constructor(private val query: String) {
