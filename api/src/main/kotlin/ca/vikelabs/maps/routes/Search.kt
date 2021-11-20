@@ -23,7 +23,11 @@ fun search(mapsData: MapData = MapData()): ContractRoute {
     val responseBodyLens = Body.auto<SearchResponseBody>().toLens()
 
     val spec = "search" meta {
+        summary = "searches the UVic campus based on a single search string"
+        description = "searches for buildings with a levenshteinDistance of 1 to the query string"
+        queries += queryQuery
         returning("successful search" to Response(Status.OK).with(responseBodyLens of SearchResponseBody(resultsFound = 1)))
+        returning("fruitless search" to Response(Status.OK).with(responseBodyLens of SearchResponseBody(resultsFound = 0)))
     } bindContract Method.GET
 
     val search: HttpHandler = { request ->

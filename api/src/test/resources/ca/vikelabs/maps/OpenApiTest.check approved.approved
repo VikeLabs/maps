@@ -41,23 +41,36 @@
     },
     "/search": {
       "get": {
-        "summary": "<unknown>",
-        "description": null,
+        "summary": "searches the UVic campus based on a single search string",
+        "description": "searches for buildings with a levenshteinDistance of 1 to the query string",
         "tags": [
           ""
         ],
         "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "query",
+            "required": true,
+            "description": null
+          }
         ],
         "responses": {
           "200": {
-            "description": "successful search",
+            "description": "fruitless search,successful search",
             "content": {
               "application/json": {
-                "example": {
-                  "resultsFound": 1
-                },
                 "schema": {
-                  "$ref": "#/components/schemas/object2116370195"
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/object2116370195"
+                    },
+                    {
+                      "$ref": "#/components/schemas/object2116370196"
+                    }
+                  ]
                 }
               }
             }
@@ -97,6 +110,17 @@
           "resultsFound": {
             "type": "integer",
             "example": 1
+          }
+        }
+      },
+      "object2116370196": {
+        "type": "object",
+        "required": [
+        ],
+        "properties": {
+          "resultsFound": {
+            "type": "integer",
+            "example": 0
           }
         }
       }
