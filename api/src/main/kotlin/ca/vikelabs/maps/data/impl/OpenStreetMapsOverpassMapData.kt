@@ -3,6 +3,7 @@ package ca.vikelabs.maps.data.impl
 import ca.vikelabs.maps.data.Building
 import ca.vikelabs.maps.data.MapData
 import ca.vikelabs.maps.opensteetmaps.types.OverpassResponse
+import ca.vikelabs.maps.routes.Coordinate
 import mu.KotlinLogging
 import org.http4k.client.JavaHttpClient
 import org.http4k.core.Body
@@ -26,7 +27,28 @@ class OpenStreetMapsOverpassMapData(
         val request = OverpassQuery.buildings.asRequest()
         val response = client(request)
         val overpassResponse = bodyLens(response)
-        return overpassResponse.elements.mapNotNull { it.tags?.name?.let { name -> Building(name) } }
+        return overpassResponse.elements.mapNotNull { overpassElement ->
+            val coords = when (overpassElement.type) {
+                "way" -> overpassElement.nodes
+                    ?.mapNotNull { node ->
+                        overpassResponse.elements.find { it.id == node }
+                            ?.let { Coordinate(it.lat!!, it.lon!!) }
+                    }
+                "relation" ->
+                    overpassElement.members?.find { it.role == "outer" && it.type == "way" }?.let { outerWay ->
+                        outerWay.ref.let { ref ->
+                            overpassResponse.elements
+                                .find { it.id == ref.toLong() }
+                        }?.members
+                            ?.mapNotNull { member ->
+                                overpassResponse.elements.find { it.id == member.ref.toLong() }
+                                    ?.let { Coordinate(it.lat!!, it.lon!!) }
+                            }
+                    }
+                else -> null
+            }
+            overpassElement.tags?.let { tags -> coords?.let { coords -> tags.name?.let { name -> Building(name, tags.abbrName, coords) } } }
+        }
     }
 }
 

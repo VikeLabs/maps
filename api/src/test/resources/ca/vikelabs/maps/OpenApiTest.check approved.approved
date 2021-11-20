@@ -59,18 +59,22 @@
         ],
         "responses": {
           "200": {
-            "description": "fruitless search,successful search",
+            "description": "successful search",
             "content": {
               "application/json": {
-                "schema": {
-                  "oneOf": [
+                "example": {
+                  "results": [
                     {
-                      "$ref": "#/components/schemas/object2116370195"
-                    },
-                    {
-                      "$ref": "#/components/schemas/object2116370196"
+                      "name": "Elliott Building",
+                      "center": {
+                        "latitude": 48.4627526,
+                        "longitude": -123.3108017
+                      }
                     }
                   ]
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/object330595632"
                 }
               }
             }
@@ -102,25 +106,45 @@
           "success"
         ]
       },
-      "object2116370195": {
+      "object1926654949": {
         "type": "object",
         "required": [
         ],
         "properties": {
-          "resultsFound": {
-            "type": "integer",
-            "example": 1
+          "latitude": {
+            "type": "number",
+            "example": 48.4627526
+          },
+          "longitude": {
+            "type": "number",
+            "example": -123.3108017
           }
         }
       },
-      "object2116370196": {
+      "object-2139479139": {
         "type": "object",
         "required": [
         ],
         "properties": {
-          "resultsFound": {
-            "type": "integer",
-            "example": 0
+          "name": {
+            "type": "string",
+            "example": "Elliott Building"
+          },
+          "center": {
+            "$ref": "#/components/schemas/object1926654949"
+          }
+        }
+      },
+      "object330595632": {
+        "type": "object",
+        "required": [
+        ],
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/object-2139479139"
+            }
           }
         }
       }
