@@ -7,6 +7,9 @@ import org.http4k.lens.LensFailure
 import org.http4k.testing.JsonApprovalTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import kotlin.system.measureTimeMillis
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 @ExtendWith(JsonApprovalTest::class)
 class OpenStreetMapsMapDataTest : CachedNetworkTest() {
@@ -25,5 +28,14 @@ class OpenStreetMapsMapDataTest : CachedNetworkTest() {
     internal fun `check elliot is in the buildings`() {
         val mapData = OpenStreetMapsOverpassMapData(client = cachedClient)
         assertThat(mapData.buildings(), anyElement(has("name", { it.name }, equalTo("Elliott Building"))))
+    }
+
+    @Test
+    internal fun `check buildings does not return duplicates`() {
+        val buildings = OpenStreetMapsOverpassMapData(client = cachedClient).buildings()
+        assertThat(
+            buildings,
+            equalTo(buildings.distinctBy { it.name })
+        )
     }
 }

@@ -7,6 +7,7 @@ import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import com.natpryce.hamkrest.greaterThanOrEqualTo
 import com.natpryce.hamkrest.has
+import com.natpryce.hamkrest.hasSize
 import org.http4k.core.Body
 import org.http4k.core.ContentType
 import org.http4k.core.Method
@@ -18,8 +19,8 @@ import org.http4k.hamkrest.hasContentType
 import org.http4k.hamkrest.hasStatus
 import org.junit.jupiter.api.Test
 
-class SearchTest : CachedNetworkTest(networkClient = null) {
-    private val responseBodyLens = Body.auto<SearchResponseBody>().toLens()
+class SearchTest : CachedNetworkTest() {
+    private val responseBodyLens = Body.auto<Search>().toLens()
     val searchHandler = search(OpenStreetMapsOverpassMapData(client = cachedClient))
 
     @Test
@@ -50,7 +51,7 @@ class SearchTest : CachedNetworkTest(networkClient = null) {
     internal fun `check search for Elliott Building has results found`() {
         assertThat(
             searchHandler(Request(Method.GET, "/search?query=Elliott Building")),
-            hasBody(responseBodyLens, has("resultsFound", { it.resultsFound }, greaterThanOrEqualTo(1)))
+            hasBody(responseBodyLens, has("results size", { it.results.size }, greaterThanOrEqualTo(1)))
         )
     }
 
@@ -58,7 +59,7 @@ class SearchTest : CachedNetworkTest(networkClient = null) {
     internal fun `check search for garbage does not have resultsFound`() {
         assertThat(
             searchHandler(Request(Method.GET, "/search?query=ouy3q4fuieafbui213")),
-            hasBody(responseBodyLens, has("resultsFound", { it.resultsFound }, equalTo(0)))
+            hasBody(responseBodyLens, has("results size", { it.results.size }, equalTo(0)))
         )
     }
 
@@ -71,10 +72,18 @@ class SearchTest : CachedNetworkTest(networkClient = null) {
     }
 
     @Test
-    internal fun `check search works with levenshtein distance of one`() {
+    internal fun `check search works with name levenshtein distance of one`() {
         assertThat(
             searchHandler(Request(Method.GET, "/search?query=Elliott Buiding")),
             equalTo(searchHandler(Request(Method.GET, "/search?query=eLlioTT buiLdiNg")))
+        )
+    }
+
+    @Test
+    internal fun `check search works with exact abbr_name`() {
+        assertThat(
+            searchHandler(Request(Method.GET, "/search?query=CSR")),
+            has("results", { responseBodyLens(it).results }, hasSize(greaterThanOrEqualTo(1)))
         )
     }
 }
