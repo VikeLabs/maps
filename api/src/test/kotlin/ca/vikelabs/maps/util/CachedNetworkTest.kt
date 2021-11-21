@@ -10,8 +10,8 @@ import org.http4k.traffic.ReadWriteCache
 private val logger = KotlinLogging.logger { }
 
 abstract class CachedNetworkTest(
-    private val networkClient: HttpHandler? = JavaHttpClient(),
-    storage: ReadWriteCache = ReadWriteCache.Disk()
+    private val networkClient: HttpHandler? = null,
+    storage: ReadWriteCache = ReadWriteCache.Disk("src/test/resources/cache")
 ) {
 
     val cachedClient = TrafficFilters.ServeCachedFrom(storage)

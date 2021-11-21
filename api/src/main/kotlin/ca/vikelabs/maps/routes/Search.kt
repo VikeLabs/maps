@@ -77,7 +77,6 @@ fun search(mapsData: MapData = MapData()): ContractRoute {
 }
 
 private fun searchMatches(it: Building, query: String): Boolean {
-    println(it.abbrName)
     val lowercaseName = it.name.lowercase()
     val lowercaseQuery = query.lowercase()
 
