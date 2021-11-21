@@ -82,9 +82,9 @@ private fun searchMatches(it: Building, query: String): Boolean {
 
     val wholeNameMatches = lowercaseName.levenshteinDistanceTo(lowercaseQuery) <= 1
 
-    val abbrNameMatches = it.abbrName?.lowercase() == lowercaseQuery
+    val abbrNameEqual = it.abbrName?.lowercase() == lowercaseQuery
 
-    val wordsMatchQuery = lowercaseName
+    val anyNameWordMatchesAnyQueryWord = lowercaseName
         .split(' ')
         .any { nameWord ->
             lowercaseQuery
@@ -92,6 +92,6 @@ private fun searchMatches(it: Building, query: String): Boolean {
                 .any { queryWord -> nameWord.levenshteinDistanceTo(queryWord) <= 1 }
         }
 
-    return wholeNameMatches || abbrNameMatches || wordsMatchQuery
+    return wholeNameMatches || abbrNameEqual || anyNameWordMatchesAnyQueryWord
 }
 
