@@ -1,7 +1,6 @@
 package ca.vikelabs.maps.util
 
 import mu.KotlinLogging
-import org.http4k.client.JavaHttpClient
 import org.http4k.core.HttpHandler
 import org.http4k.core.then
 import org.http4k.filter.TrafficFilters
