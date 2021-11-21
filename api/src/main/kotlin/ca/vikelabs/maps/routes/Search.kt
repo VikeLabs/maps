@@ -16,12 +16,12 @@ import org.http4k.format.Jackson.auto
 import org.http4k.lens.Query
 import org.http4k.lens.string
 
-
 data class Search(val results: List<SearchResult>)
 data class SearchResult(val name: String, val center: Coordinate) {
     constructor(building: Building) : this(
         name = building.name,
-        center = building.bounds.reduce { acc, coordinates -> acc + coordinates } / building.bounds.size)
+        center = building.bounds.reduce { acc, coordinates -> acc + coordinates } / building.bounds.size
+    )
 }
 
 data class Coordinate(val latitude: Double, val longitude: Double) {
@@ -52,7 +52,8 @@ fun search(mapsData: MapData = MapData()): ContractRoute {
                     responseBodyLens of Search(
                         listOf(
                             SearchResult(
-                                "Elliott Building", Coordinate(
+                                "Elliott Building",
+                                Coordinate(
                                     48.4627526,
                                     -123.3108017
                                 )
@@ -94,4 +95,3 @@ private fun searchMatches(it: Building, query: String): Boolean {
 
     return wholeNameMatches || abbrNameEqual || anyNameWordMatchesAnyQueryWord
 }
-

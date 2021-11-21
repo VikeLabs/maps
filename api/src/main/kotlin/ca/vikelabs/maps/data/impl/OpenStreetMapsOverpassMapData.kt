@@ -34,9 +34,10 @@ class OpenStreetMapsOverpassMapData(
         val overpassResponse = bodyLens(response)
         return overpassResponse.elements.mapNotNull { overpassElement ->
             val coords = when (overpassElement.type) {
-                "way" -> overpassElement.nodes
-                    ?.mapNotNull { overpassResponse.findElementByRef(it) }
-                    ?.map { Coordinate(it.lat!!, it.lon!!) }
+                "way" ->
+                    overpassElement.nodes
+                        ?.mapNotNull { overpassResponse.findElementByRef(it) }
+                        ?.map { Coordinate(it.lat!!, it.lon!!) }
                 "relation" -> {
                     val outerWayRef = overpassElement.members?.find { it.role == "outer" && it.type == "way" }
                         ?: return@mapNotNull null
@@ -61,7 +62,6 @@ class OpenStreetMapsOverpassMapData(
 private fun OverpassResponse.findElementByRef(ref: Number): OverpassElement? =
     this.elements.find { it.id == ref.toLong() }
 
-
 @JvmInline
 private value class OverpassQuery private constructor(private val query: String) {
     fun asRequest(uri: Uri): Request = Request(Method.GET, uri).query("data", this.query)
@@ -85,8 +85,7 @@ private value class OverpassQuery private constructor(private val query: String)
             );
 
             out;
-        """.trimIndent()
+            """.trimIndent()
         )
     }
 }
-
