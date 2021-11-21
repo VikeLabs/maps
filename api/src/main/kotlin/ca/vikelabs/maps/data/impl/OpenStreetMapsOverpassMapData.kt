@@ -20,18 +20,22 @@ class OpenStreetMapsOverpassMapData(
     private val client: HttpHandler = JavaHttpClient(),
     private val overpassInstanceEndpoint: Uri = Uri.of("https://lz4.overpass-api.de/api/interpreter")
 ) : MapData {
-    private fun OverpassQuery.asRequest() = this.asRequest(overpassInstanceEndpoint)
+    private fun OverpassQuery.asRequest() = asRequest(overpassInstanceEndpoint)
 
     private val bodyLens = Body.auto<OverpassResponse>().toLens()
 
     override fun buildings(): List<Building> {
         val request = OverpassQuery.buildings.asRequest()
+
+        // try to avoid this being a network call as much as possible, overpass is very slow.
         val response = client(request)
+
+        // TODO: 2021-11-20 cache this somehow as it nearly takes a full second to parse the json
         val overpassResponse = bodyLens(response)
         return overpassResponse.elements.mapNotNull { overpassElement ->
             val coords = when (overpassElement.type) {
                 "way" -> overpassElement.nodes
-                    ?.mapNotNull { nodeRef -> overpassResponse.findElementByRef(nodeRef) }
+                    ?.mapNotNull { overpassResponse.findElementByRef(it) }
                     ?.map { Coordinate(it.lat!!, it.lon!!) }
                 "relation" -> {
                     val outerWayRef = overpassElement.members?.find { it.role == "outer" && it.type == "way" }

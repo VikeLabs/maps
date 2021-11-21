@@ -3,6 +3,7 @@ package ca.vikelabs.maps.routes
 import ca.vikelabs.maps.application
 import ca.vikelabs.maps.data.impl.OpenStreetMapsOverpassMapData
 import ca.vikelabs.maps.util.CachedNetworkTest
+import com.natpryce.hamkrest.anyElement
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import com.natpryce.hamkrest.greaterThanOrEqualTo
@@ -84,6 +85,28 @@ class SearchTest : CachedNetworkTest() {
         assertThat(
             searchHandler(Request(Method.GET, "/search?query=CSR")),
             has("results", { responseBodyLens(it).results }, hasSize(greaterThanOrEqualTo(1)))
+        )
+    }
+
+    @Test
+    internal fun `check searching elliot yields the Elliot Building`() {
+        assertThat(
+            searchHandler(Request(Method.GET, "/search?query=elliott")),
+            hasBody(
+                responseBodyLens,
+                has("results", { it.results }, anyElement(has("name", { it.name }, equalTo("Elliott Building"))))
+            )
+        )
+    }
+
+    @Test
+    internal fun `check searching elliot and yeet yields the Elliot Building`() {
+        assertThat(
+            searchHandler(Request(Method.GET, "/search?query=elliott and yeet")),
+            hasBody(
+                responseBodyLens,
+                has("results", { it.results }, anyElement(has("name", { it.name }, equalTo("Elliott Building"))))
+            )
         )
     }
 }

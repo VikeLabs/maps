@@ -1,15 +1,16 @@
 package ca.vikelabs.maps.data.impl
 
 import ca.vikelabs.maps.util.CachedNetworkTest
-import com.natpryce.hamkrest.*
+import com.natpryce.hamkrest.anyElement
 import com.natpryce.hamkrest.assertion.assertThat
+import com.natpryce.hamkrest.equalTo
+import com.natpryce.hamkrest.has
+import com.natpryce.hamkrest.isA
+import com.natpryce.hamkrest.throws
 import org.http4k.lens.LensFailure
 import org.http4k.testing.JsonApprovalTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import kotlin.system.measureTimeMillis
-import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.seconds
 
 @ExtendWith(JsonApprovalTest::class)
 class OpenStreetMapsMapDataTest : CachedNetworkTest() {
@@ -25,7 +26,7 @@ class OpenStreetMapsMapDataTest : CachedNetworkTest() {
     }
 
     @Test
-    internal fun `check elliot is in the buildings`() {
+    internal fun `check elliott is in the buildings`() {
         val mapData = OpenStreetMapsOverpassMapData(client = cachedClient)
         assertThat(mapData.buildings(), anyElement(has("name", { it.name }, equalTo("Elliott Building"))))
     }
