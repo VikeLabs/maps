@@ -77,8 +77,21 @@ fun search(mapsData: MapData = MapData()): ContractRoute {
 
 private fun searchMatches(it: Building, query: String): Boolean {
     println(it.abbrName)
-    val nameMatches = it.name.lowercase().levenshteinDistanceTo(query.lowercase()) <= 1
-    val abbrNamematches = it.abbrName?.lowercase() == query.lowercase()
-    return nameMatches || abbrNamematches
+    val lowercaseName = it.name.lowercase()
+    val lowercaseQuery = query.lowercase()
+
+    val wholeNameMatches = lowercaseName.levenshteinDistanceTo(lowercaseQuery) <= 1
+
+    val abbrNameMatches = it.abbrName?.lowercase() == lowercaseQuery
+
+    val wordsMatchQuery = lowercaseName
+        .split(' ')
+        .any { nameWord ->
+            lowercaseQuery
+                .split(' ')
+                .any { queryWord -> nameWord.levenshteinDistanceTo(queryWord) <= 1 }
+        }
+
+    return wholeNameMatches || abbrNameMatches || wordsMatchQuery
 }
 
