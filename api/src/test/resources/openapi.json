@@ -1,0 +1,208 @@
+{
+    "info": {
+        "title": "map uvic",
+        "version": "0.0.1",
+        "description": "An API for navigating around the University of Victoria."
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000"
+        }
+    ],
+    "tags": [
+    ],
+    "paths": {
+        "/ping": {
+            "get": {
+                "summary": "Returns 200 OK and a small json object describing the server status.",
+                "description": "A handy endpoint for checking to see weather the server is alive and replying.",
+                "tags": [
+                    ""
+                ],
+                "parameters": [
+                ],
+                "responses": {
+                    "200": {
+                        "description": "a successful ping!",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "success": true
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/Success",
+                                    "example": null,
+                                    "description": null
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                ],
+                "operationId": "getPing",
+                "deprecated": false
+            }
+        },
+        "/search": {
+            "get": {
+                "summary": "searches the UVic campus based on a single search string",
+                "description": "searches for buildings with a levenshteinDistance of 1 to the query string",
+                "tags": [
+                    ""
+                ],
+                "parameters": [
+                    {
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query",
+                        "name": "query",
+                        "required": true,
+                        "description": null
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "a single result",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "results": [
+                                        {
+                                            "name": "Elliott Building",
+                                            "center": {
+                                                "latitude": 48.4627526,
+                                                "longitude": -123.3108017
+                                            }
+                                        }
+                                    ]
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/SearchResponse",
+                                    "example": null,
+                                    "description": null
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                ],
+                "operationId": "getSearch",
+                "deprecated": false
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Success": {
+                "properties": {
+                    "success": {
+                        "example": true,
+                        "description": null,
+                        "type": "boolean"
+                    }
+                },
+                "example": {
+                    "success": true
+                },
+                "description": null,
+                "type": "object",
+                "required": [
+                    "success"
+                ]
+            },
+            "SearchResponse": {
+                "properties": {
+                    "results": {
+                        "items": {
+                            "$ref": "#/components/schemas/SearchResult"
+                        },
+                        "example": [
+                            {
+                                "name": "Elliott Building",
+                                "center": {
+                                    "latitude": 48.4627526,
+                                    "longitude": -123.3108017
+                                }
+                            }
+                        ],
+                        "description": null,
+                        "type": "array"
+                    }
+                },
+                "example": {
+                    "results": [
+                        {
+                            "name": "Elliott Building",
+                            "center": {
+                                "latitude": 48.4627526,
+                                "longitude": -123.3108017
+                            }
+                        }
+                    ]
+                },
+                "description": null,
+                "type": "object",
+                "required": [
+                    "results"
+                ]
+            },
+            "SearchResult": {
+                "properties": {
+                    "name": {
+                        "example": "Elliott Building",
+                        "description": null,
+                        "type": "string"
+                    },
+                    "center": {
+                        "$ref": "#/components/schemas/Coordinate",
+                        "example": null,
+                        "description": null
+                    }
+                },
+                "example": {
+                    "name": "Elliott Building",
+                    "center": {
+                        "latitude": 48.4627526,
+                        "longitude": -123.3108017
+                    }
+                },
+                "description": null,
+                "type": "object",
+                "required": [
+                    "center",
+                    "name"
+                ]
+            },
+            "Coordinate": {
+                "properties": {
+                    "latitude": {
+                        "example": 48.4627526,
+                        "description": null,
+                        "type": "number"
+                    },
+                    "longitude": {
+                        "example": -123.3108017,
+                        "description": null,
+                        "type": "number"
+                    }
+                },
+                "example": {
+                    "latitude": 48.4627526,
+                    "longitude": -123.3108017
+                },
+                "description": null,
+                "type": "object",
+                "required": [
+                    "latitude",
+                    "longitude"
+                ]
+            }
+        },
+        "securitySchemes": {
+        }
+    },
+    "openapi": "3.0.0"
+}
