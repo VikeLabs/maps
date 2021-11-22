@@ -13,18 +13,22 @@ import org.http4k.format.Jackson.auto
 
 data class Success(val success: Boolean = true)
 
+object Ping {
+    val response = Body.auto<Success>().toLens()
+}
+
 fun ping(): ContractRoute {
-    val body = Body.auto<Success>().toLens()
+
 
     val spec = "/ping" meta {
         summary = "Returns 200 OK and a small json object describing the server status."
         description = "A handy endpoint for checking to see weather the server is alive and replying."
         produces += ContentType.APPLICATION_JSON
-        returning(Status.OK, body to Success())
+        returning(Status.OK, Ping.response to Success(), "a successful ping!")
     } bindContract Method.GET
 
     val ping: HttpHandler = { _ ->
-        Response(Status.OK).with(body of Success())
+        Response(Status.OK).with(Ping.response of Success())
     }
 
     return spec to ping

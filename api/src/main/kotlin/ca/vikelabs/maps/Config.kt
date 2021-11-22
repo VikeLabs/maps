@@ -9,16 +9,6 @@ import kotlin.io.path.exists
 private val logger = KotlinLogging.logger {}
 
 data class Config(val port: Int = 8000) {
-    object FailureHandlers {
-        val warnAndDefault = fun(message: String): Config {
-            logger.warn { "$message Using default config." }
-            return Config()
-        }
-        val throwWithMessage = fun(it: String): Nothing {
-            throw Exception("Initialization of config failed with: $it")
-        }
-    }
-
     companion object {
         fun fromArgs(
             args: Array<String>,
@@ -46,6 +36,16 @@ data class Config(val port: Int = 8000) {
             } else {
                 onFailure("\"$path\" does not exist")
             }
+        }
+    }
+
+    object FailureHandlers {
+        val warnAndDefault = fun(message: String): Config {
+            logger.warn { "$message Using default config." }
+            return Config()
+        }
+        val throwWithMessage = fun(message: String): Nothing {
+            throw Exception("Initialization of config failed with: $message")
         }
     }
 }

@@ -9,19 +9,16 @@ import com.natpryce.hamkrest.equalTo
 import com.natpryce.hamkrest.greaterThanOrEqualTo
 import com.natpryce.hamkrest.has
 import com.natpryce.hamkrest.hasSize
-import org.http4k.core.Body
 import org.http4k.core.ContentType
 import org.http4k.core.Method
 import org.http4k.core.Request
 import org.http4k.core.Status
-import org.http4k.format.Jackson.auto
 import org.http4k.hamkrest.hasBody
 import org.http4k.hamkrest.hasContentType
 import org.http4k.hamkrest.hasStatus
 import org.junit.jupiter.api.Test
 
 class SearchTest : CachedNetworkTest() {
-    private val responseBodyLens = Body.auto<Search>().toLens()
     val searchHandler = search(OpenStreetMapsOverpassMapData(client = cachedClient))
 
     @Test
@@ -52,7 +49,7 @@ class SearchTest : CachedNetworkTest() {
     internal fun `check search for Elliott Building has results found`() {
         assertThat(
             searchHandler(Request(Method.GET, "/search?query=Elliott Building")),
-            hasBody(responseBodyLens, has("results size", { it.results.size }, greaterThanOrEqualTo(1)))
+            hasBody(Search.response, has("results size", { it.results.size }, greaterThanOrEqualTo(1)))
         )
     }
 
@@ -60,7 +57,7 @@ class SearchTest : CachedNetworkTest() {
     internal fun `check search for garbage does not have resultsFound`() {
         assertThat(
             searchHandler(Request(Method.GET, "/search?query=ouy3q4fuieafbui213")),
-            hasBody(responseBodyLens, has("results size", { it.results.size }, equalTo(0)))
+            hasBody(Search.response, has("results size", { it.results.size }, equalTo(0)))
         )
     }
 
@@ -84,7 +81,10 @@ class SearchTest : CachedNetworkTest() {
     internal fun `check search works with exact abbr_name`() {
         assertThat(
             searchHandler(Request(Method.GET, "/search?query=CSR")),
-            has("results", { responseBodyLens(it).results }, hasSize(greaterThanOrEqualTo(1)))
+            hasBody(
+                Search.response,
+                has("results", { it.results }, hasSize(greaterThanOrEqualTo(1)))
+            )
         )
     }
 
@@ -93,7 +93,7 @@ class SearchTest : CachedNetworkTest() {
         assertThat(
             searchHandler(Request(Method.GET, "/search?query=elliott")),
             hasBody(
-                responseBodyLens,
+                Search.response,
                 has("results", { it.results }, anyElement(has("name", { it.name }, equalTo("Elliott Building"))))
             )
         )
@@ -104,7 +104,7 @@ class SearchTest : CachedNetworkTest() {
         assertThat(
             searchHandler(Request(Method.GET, "/search?query=elliott and yeet")),
             hasBody(
-                responseBodyLens,
+                Search.response,
                 has("results", { it.results }, anyElement(has("name", { it.name }, equalTo("Elliott Building"))))
             )
         )

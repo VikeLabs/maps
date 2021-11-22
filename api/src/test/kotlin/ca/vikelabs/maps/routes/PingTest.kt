@@ -14,22 +14,21 @@ import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(JsonApprovalTest::class)
 class PingTest {
-    private val pingRoute = ping()
-    private val request = Request(Method.GET, "/ping")
-    private val response = pingRoute(request)
+    val ping = ping()
 
     @Test
     fun `check status`() {
-        assertThat(response, hasStatus(Status.OK))
+
+        assertThat(ping(Request(Method.GET, "/ping")), hasStatus(Status.OK))
     }
 
     @Test
     fun `check content type`() {
-        assertThat(response, hasContentType(ContentType.APPLICATION_JSON))
+        assertThat(ping(Request(Method.GET, "/ping")), hasContentType(ContentType.APPLICATION_JSON))
     }
 
     @Test
     fun `check approved`(approver: Approver) {
-        approver.assertApproved(response)
+        approver.assertApproved(ping(Request(Method.GET, "/ping")))
     }
 }

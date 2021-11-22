@@ -9,15 +9,15 @@ import org.http4k.traffic.ReadWriteCache
 private val logger = KotlinLogging.logger { }
 
 abstract class CachedNetworkTest(
-    private val networkClient: HttpHandler? = null,
+    private val fallbackNetworkClient: HttpHandler? = null,
     storage: ReadWriteCache = ReadWriteCache.Disk("src/test/resources/cache")
 ) {
 
     val cachedClient = TrafficFilters.ServeCachedFrom(storage)
         .then(TrafficFilters.RecordTo(storage))
         .then { request ->
-            logger.warn { "a CachedNetworkTest is falling back onto a network call. This should only occur on the first round of testing." }
-            networkClient?.invoke(request)
+            logger.warn { "a CachedNetworkTest is falling back onto a network call." }
+            fallbackNetworkClient?.invoke(request)
                 ?: throw Exception("no network client to fall back on")
         }
 }
