@@ -34,7 +34,6 @@
         "typescript": "^3.9.3"
     },
     "dependencies": {
-        "@types/node": "^16.11.9",
         "sirv-cli": "^1.0.0"
     },
     "jest": {
