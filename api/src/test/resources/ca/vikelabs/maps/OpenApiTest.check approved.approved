@@ -18,7 +18,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "a successful ping!",
             "content": {
               "application/json": {
                 "example": {
@@ -59,7 +59,7 @@
         ],
         "responses": {
           "200": {
-            "description": "successful search",
+            "description": "a single result",
             "content": {
               "application/json": {
                 "example": {
@@ -74,7 +74,9 @@
                   ]
                 },
                 "schema": {
-                  "$ref": "#/components/schemas/object330595632"
+                  "$ref": "#/components/schemas/SearchResponse",
+                  "example": null,
+                  "description": null
                 }
               }
             }
@@ -106,47 +108,92 @@
           "success"
         ]
       },
-      "object1926654949": {
-        "type": "object",
-        "required": [
-        ],
-        "properties": {
-          "latitude": {
-            "type": "number",
-            "example": 48.4627526
-          },
-          "longitude": {
-            "type": "number",
-            "example": -123.3108017
-          }
-        }
-      },
-      "object-2139479139": {
-        "type": "object",
-        "required": [
-        ],
-        "properties": {
-          "name": {
-            "type": "string",
-            "example": "Elliott Building"
-          },
-          "center": {
-            "$ref": "#/components/schemas/object1926654949"
-          }
-        }
-      },
-      "object330595632": {
-        "type": "object",
-        "required": [
-        ],
+      "SearchResponse": {
         "properties": {
           "results": {
-            "type": "array",
             "items": {
-              "$ref": "#/components/schemas/object-2139479139"
-            }
+              "$ref": "#/components/schemas/SearchResult"
+            },
+            "example": [
+              {
+                "name": "Elliott Building",
+                "center": {
+                  "latitude": 48.4627526,
+                  "longitude": -123.3108017
+                }
+              }
+            ],
+            "description": null,
+            "type": "array"
           }
-        }
+        },
+        "example": {
+          "results": [
+            {
+              "name": "Elliott Building",
+              "center": {
+                "latitude": 48.4627526,
+                "longitude": -123.3108017
+              }
+            }
+          ]
+        },
+        "description": null,
+        "type": "object",
+        "required": [
+          "results"
+        ]
+      },
+      "SearchResult": {
+        "properties": {
+          "name": {
+            "example": "Elliott Building",
+            "description": null,
+            "type": "string"
+          },
+          "center": {
+            "$ref": "#/components/schemas/Coordinate",
+            "example": null,
+            "description": null
+          }
+        },
+        "example": {
+          "name": "Elliott Building",
+          "center": {
+            "latitude": 48.4627526,
+            "longitude": -123.3108017
+          }
+        },
+        "description": null,
+        "type": "object",
+        "required": [
+          "center",
+          "name"
+        ]
+      },
+      "Coordinate": {
+        "properties": {
+          "latitude": {
+            "example": 48.4627526,
+            "description": null,
+            "type": "number"
+          },
+          "longitude": {
+            "example": -123.3108017,
+            "description": null,
+            "type": "number"
+          }
+        },
+        "example": {
+          "latitude": 48.4627526,
+          "longitude": -123.3108017
+        },
+        "description": null,
+        "type": "object",
+        "required": [
+          "latitude",
+          "longitude"
+        ]
       }
     },
     "securitySchemes": {
