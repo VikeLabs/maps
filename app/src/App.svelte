@@ -1,24 +1,31 @@
 <script lang="ts">
-	export let name: string;
+    import * as L from 'leaflet';
+    import 'leaflet/dist/leaflet.css';
+    let map: L.Map;
+
+    const createMap = (container: HTMLElement) => {
+        let m = L.map(container).setView([51.505, -0.09], 13);
+        L.tileLayer(
+            'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+            {
+                attribution: `&copy;<a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>,
+          &copy;<a href="https://carto.com/attributions" target="_blank">CARTO</a>`,
+                subdomains: 'abcd',
+                maxZoom: 14,
+            }
+        ).addTo(m);
+
+        return m;
+    };
+
+    function mapAction(container: HTMLElement) {
+        map = createMap(container);
+        return {
+            destroy: () => {
+                map.remove();
+            },
+        };
+    }
 </script>
 
-<main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
-</main>
-
-<style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
-	}
-
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
-</style>
+<div style="height:100vh;width:100vw" use:mapAction></div>

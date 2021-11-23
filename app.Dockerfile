@@ -1,5 +1,5 @@
 FROM gradle:7.2.0-jdk11
-COPY api/src/test/resources/ca/vikelabs/maps/openapi.json /home/gradle/src/api/src/test/resources/ca/vikelabs/maps/openapi.json
+COPY api/src/test/resources/openapi.json /home/gradle/src/api/src/test/resources/openapi.json
 COPY --chown=gradle:gradle settings.gradle.kts /home/gradle/src
 COPY --chown=gradle:gradle ./app /home/gradle/src/app
 WORKDIR /home/gradle/src
