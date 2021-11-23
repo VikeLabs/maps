@@ -4,23 +4,19 @@
 
     let map: L.Map;
 
-    const createMap = (container: HTMLElement) => {
-        let m = L.map(container).setView([48.463069, -123.311833], 16);
+    function mapAction(container: HTMLElement) {
+
+        map = L.map(container).setView([48.463069, -123.311833], 16);
+
         L.tileLayer(
             'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
             {
-                attribution: `&copy;<a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>,
-          &copy;<a href="https://carto.com/attributions" target="_blank">CARTO</a>`,
+                attribution: `&copy;<a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>,&copy;<a href="https://carto.com/attributions" target="_blank">CARTO</a>`,
                 subdomains: 'abcd',
                 maxZoom: 20,
             }
-        ).addTo(m);
+        ).addTo(map);
 
-        return m;
-    };
-
-    function mapAction(container: HTMLElement) {
-        map = createMap(container);
         return {
             destroy: () => {
                 map.remove();
