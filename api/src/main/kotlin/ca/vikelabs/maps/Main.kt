@@ -2,7 +2,6 @@ package ca.vikelabs.maps
 
 import mu.KotlinLogging
 import org.http4k.server.Jetty
-import org.http4k.server.SunHttp
 import org.http4k.server.asServer
 
 private val logger = KotlinLogging.logger {}

@@ -19,7 +19,6 @@ object Ping {
 
 fun ping(): ContractRoute {
 
-
     val spec = "/ping" meta {
         summary = "Returns 200 OK and a small json object describing the server status."
         description = "A handy endpoint for checking to see weather the server is alive and replying."

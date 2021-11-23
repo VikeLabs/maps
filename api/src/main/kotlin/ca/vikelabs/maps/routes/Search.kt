@@ -23,7 +23,6 @@ object Search {
 
 fun search(mapsData: MapData = MapData()): ContractRoute {
 
-
     val spec = "search" meta {
         summary = "searches the UVic campus based on a single search string"
         description = "searches for buildings with a levenshteinDistance of 1 to the query string"
