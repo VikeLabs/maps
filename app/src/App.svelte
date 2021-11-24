@@ -7,8 +7,7 @@
     let map: L.Map;
 
     function mapAction(container: HTMLElement) {
-        let uvicCoords = [48.463069, -123.311833];
-        map = L.map(container).setView(uvicCoords, 16);
+        map = L.map(container).setView([48.463069, -123.311833], 16);
 
         L.tileLayer(
             'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
@@ -25,11 +24,11 @@
         };
     }
 
-    let toolbar = L.control({position: 'topright'});
+    let toolbar = new L.Control({position: 'topright'});
 
-    let toolbarComponent;
+    let toolbarComponent: SearchBar;
 
-    toolbar.onAdd = (map) => {
+    toolbar.onAdd = (map: L.Map) => {
         let div = L.DomUtil.create('div');
         toolbarComponent = new SearchBar({
             target: div,
