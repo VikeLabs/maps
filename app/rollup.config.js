@@ -39,7 +39,7 @@ export default {
 		file: 'public/build/bundle.js'
 	},
 	plugins: [
-        css({ output: "public/build/extra.css" }),
+        css({ output: "extra.css" }),
 		svelte({
 			// enable run-time checks when not in production
 			dev: !production,
