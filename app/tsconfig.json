@@ -1,13 +1,22 @@
 {
-  "extends": "@tsconfig/svelte/tsconfig.json",
+    "extends": "@tsconfig/svelte/tsconfig.json",
 
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": ["node_modules/*", "__sapper__/*",
-    "public/*"
-  ],
-  "compilerOptions": {
-    "types": ["jest"]
-  }
+    "include": [
+        "src/**/*",
+        "dist/**/*",
+        "src/node_modules"
+    ],
+    "exclude": [
+        "node_modules/*",
+        "__sapper__/*",
+        "public/*"
+    ],
+    "compilerOptions": {
+        "module": "ES2015",
+        "types": [
+            "jest",
+            "node",
+            "svelte"
+        ]
+    },
 }
