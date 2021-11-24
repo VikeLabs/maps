@@ -26,7 +26,7 @@ dependencies {
     implementation(group = "org.http4k", name = "http4k-server-jetty")
 
     // logging
-    implementation(group = "org.slf4j", name = "slf4j-simple", version = "1.7.29")
+    implementation(group = "org.slf4j", name = "slf4j-simple", version = "2.0.0-alpha5")
     implementation(group = "io.github.microutils", name = "kotlin-logging-jvm", version = "2.0.10")
 
     // testing
