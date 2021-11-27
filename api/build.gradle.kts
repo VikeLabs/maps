@@ -18,12 +18,12 @@ repositories {
 
 dependencies {
     // http4k
-    implementation(platform("org.http4k:http4k-bom:4.16.2.0"))
+    implementation(platform("org.http4k:http4k-bom:4.17.2.0"))
     implementation(group = "org.http4k", name = "http4k-core")
     implementation(group = "org.http4k", name = "http4k-contract")
     implementation(group = "org.http4k", name = "http4k-format-jackson")
     implementation(group = "org.http4k", name = "http4k-client-apache")
-    implementation(group = "org.http4k", name = "http4k-server-jetty", version = "4.17.1.0")
+    implementation(group = "org.http4k", name = "http4k-server-jetty")
 
     // logging
     implementation(group = "org.slf4j", name = "slf4j-simple", version = "1.7.29")
