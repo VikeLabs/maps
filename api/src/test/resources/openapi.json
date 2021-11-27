@@ -4,12 +4,13 @@
         "version": "0.0.1",
         "description": "An API for navigating around the University of Victoria."
     },
+    "tags": [
+    ],
     "servers": [
         {
-            "url": "http://localhost:8000"
+            "url": "http://localhost:8000",
+            "description": "The greatest server!"
         }
-    ],
-    "tags": [
     ],
     "paths": {
         "/ping": {
