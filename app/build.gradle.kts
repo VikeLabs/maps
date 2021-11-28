@@ -1,6 +1,5 @@
 import com.github.gradle.node.npm.task.NpmTask
 
-
 plugins {
     id("com.github.node-gradle.node") version "3.0.1"
     base
@@ -34,12 +33,6 @@ tasks {
         args.set(listOf("run", "start"))
     }
 
-    val test by registering(NpmTask::class) {
-        description = "Tests the project"
-        dependsOn(assemble)
-        args.set(listOf("run", "test", "--", "--watchAll=false"))
-    }
-
     val validate by registering(NpmTask::class) {
         description = "Tests the project"
         args.set(listOf("run", "validate"))
@@ -52,7 +45,6 @@ tasks {
 
     check {
         dependsOn(validate)
-        dependsOn(test)
     }
 }
 
