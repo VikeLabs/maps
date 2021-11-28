@@ -22,25 +22,32 @@ tasks {
     }
 
     val dev by registering(NpmTask::class) {
-        dependsOn(assemble)
         description = "Runs the a development build of the project "
+        dependsOn(npmInstall)
+        dependsOn(generateClient)
         args.set(listOf("run", "dev"))
     }
 
     val run by registering(NpmTask::class) {
-        dependsOn(assemble)
         description = "Runs a production build of the project"
-        args.set(listOf("run", "start"))
+        dependsOn(assemble)
+        args.set(listOf("run", "serve"))
     }
 
     val validate by registering(NpmTask::class) {
-        description = "Tests the project"
-        args.set(listOf("run", "validate"))
+        description = "runs svelte-check on the project"
+        args.set(listOf("run", "check"))
+    }
+
+    val buildProd by registering(NpmTask::class) {
+        description = "creates an optimized production build"
+        args.set(listOf("run", "build"))
     }
 
     assemble {
         dependsOn(npmInstall)
         dependsOn(generateClient)
+        dependsOn(buildProd)
     }
 
     check {
