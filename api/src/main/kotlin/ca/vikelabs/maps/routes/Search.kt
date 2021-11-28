@@ -2,7 +2,9 @@ package ca.vikelabs.maps.routes
 
 import ca.vikelabs.maps.data.Building
 import ca.vikelabs.maps.data.MapData
+import ca.vikelabs.maps.data.impl.OpenStreetMapsOverpassMapData
 import ca.vikelabs.maps.extensions.levenshteinDistanceTo
+import org.http4k.client.JavaHttpClient
 import org.http4k.contract.ContractRoute
 import org.http4k.contract.meta
 import org.http4k.core.Body
@@ -11,17 +13,23 @@ import org.http4k.core.HttpHandler
 import org.http4k.core.Method
 import org.http4k.core.Response
 import org.http4k.core.Status
+import org.http4k.core.then
 import org.http4k.core.with
+import org.http4k.filter.CachingFilters
 import org.http4k.format.Jackson.auto
 import org.http4k.lens.Query
 import org.http4k.lens.string
+import java.time.Clock
+import java.time.Duration
 
 object Search {
     val query = Query.string().required("query")
     val response = Body.auto<SearchResponse>().toLens()
 }
 
-fun search(mapsData: MapData = MapData()): ContractRoute {
+fun search(
+    mapsData: MapData = MapData()
+): ContractRoute {
 
     val spec = "search" meta {
         summary = "searches the UVic campus based on a single search string"
