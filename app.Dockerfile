@@ -4,6 +4,6 @@ COPY --chown=gradle:gradle settings.gradle.kts /home/gradle/src
 COPY --chown=gradle:gradle ./app /home/gradle/src/app
 WORKDIR /home/gradle/src
 RUN gradle app:build
-EXPOSE 5000:5000
-HEALTHCHECK CMD curl --fail http://localhost:5000 || exit 1
+EXPOSE 3000:3000
+HEALTHCHECK CMD curl --fail http://localhost:3000 || exit 1
 CMD ["gradle", "app:run", "--console=plain"]
