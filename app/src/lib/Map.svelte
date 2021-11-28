@@ -1,7 +1,8 @@
 <script lang="ts">
     import * as L from 'leaflet'
     import MapSearch from "./MapSearch.svelte";
-    import {CancelablePromise, SearchResponse, Service} from "../../dist";
+    import {Service} from "../../api";
+    import type {CancelablePromise, SearchResponse} from "../../api";
     import {toast} from "@zerodevx/svelte-toast";
 
     let map: L.Map
