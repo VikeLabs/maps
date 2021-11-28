@@ -41,6 +41,8 @@ tasks {
 
     val buildProd by registering(NpmTask::class) {
         description = "creates an optimized production build"
+        dependsOn(npmInstall)
+        dependsOn(generateClient)
         args.set(listOf("run", "build"))
     }
 
