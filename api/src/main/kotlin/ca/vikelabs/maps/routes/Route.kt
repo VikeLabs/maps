@@ -28,5 +28,5 @@ fun route(): ContractRoute {
     return spec bindContract GET to ::impl
 }
 
-fun impl(): HttpHandler = handler@{ _: Request -> Response(Status.OK) }
+private fun impl(): HttpHandler = handler@{ _: Request -> Response(Status.OK) }
 
