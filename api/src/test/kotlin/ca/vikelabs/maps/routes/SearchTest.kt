@@ -9,16 +9,18 @@ import com.natpryce.hamkrest.equalTo
 import com.natpryce.hamkrest.greaterThanOrEqualTo
 import com.natpryce.hamkrest.has
 import com.natpryce.hamkrest.hasSize
+import org.http4k.client.JavaHttpClient
 import org.http4k.core.ContentType
 import org.http4k.core.Method
 import org.http4k.core.Request
 import org.http4k.core.Status
+import org.http4k.core.Status.Companion.BAD_REQUEST
 import org.http4k.hamkrest.hasBody
 import org.http4k.hamkrest.hasContentType
 import org.http4k.hamkrest.hasStatus
 import org.junit.jupiter.api.Test
 
-class SearchTest : CachedNetworkTest() {
+class SearchTest : CachedNetworkTest(JavaHttpClient()) {
     val searchHandler = search(OpenStreetMapsOverpassMapData(client = cachedClient))
     val application = application()
 
@@ -108,6 +110,14 @@ class SearchTest : CachedNetworkTest() {
                 Search.response,
                 has("results", { it.results }, anyElement(has("name", { it.name }, equalTo("Elliott Building"))))
             )
+        )
+    }
+
+    @Test
+    fun `check searching for empty string is bad request`() {
+        assertThat(
+            searchHandler(Request(Method.GET, "/search?query=")),
+            hasStatus(BAD_REQUEST)
         )
     }
 }

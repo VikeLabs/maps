@@ -18,6 +18,11 @@ tasks {
     val generateClient by registering(NpmTask::class) {
         description = "Creates the client for hitting the maps api"
         dependsOn(npmInstall)
+        inputs.file("../api/src/test/resources/openapi.json")
+        outputs.file("./api/*")
+
+        this.outputs.cacheIf { true }
+
         args.set(listOf("run", "generate"))
     }
 

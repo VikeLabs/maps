@@ -2,13 +2,22 @@ package ca.vikelabs.maps
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import mu.KotlinLogging
+import org.http4k.core.Filter
+import org.http4k.core.then
+import org.http4k.filter.CorsPolicy
+import org.http4k.filter.ServerFilters
 import java.nio.file.Path
 import kotlin.io.path.Path
 import kotlin.io.path.exists
 
 private val logger = KotlinLogging.logger {}
 
-data class Config(val port: Int = 8000) {
+data class Config(
+    val port: Int = 8000,
+    val requestLogging: Boolean = true,
+    val responseLogging: Boolean = true,
+    val unsafeCors: Boolean = true,
+) {
     companion object {
         fun fromArgs(
             args: Array<String>,
@@ -48,4 +57,21 @@ data class Config(val port: Int = 8000) {
             throw Exception("Initialization of config failed with: $message")
         }
     }
+
+    private val configuredLogger = Filter { next ->
+        { req ->
+            if (requestLogging) {
+                logger.info { req.toMessage() }
+            }
+            val response = next(req)
+            if (responseLogging) {
+                logger.info { req.toMessage() }
+            }
+            response
+        }
+    }
+
+    private val cors = if (unsafeCors) ServerFilters.Cors(CorsPolicy.UnsafeGlobalPermissive) else Filter { it }
+
+    val filters = cors.then(configuredLogger)
 }

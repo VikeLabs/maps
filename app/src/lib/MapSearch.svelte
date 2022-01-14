@@ -9,5 +9,7 @@
 </script>
 
 <input type="text" bind:value={text} on:change={() => {
-    dispatch(Events.Search, {text})
+    if (text.length > 2) {
+        dispatch(Events.Search, {text})
+    }
 }}>
