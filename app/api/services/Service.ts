@@ -22,6 +22,33 @@ export class Service {
     }
 
     /**
+     * Route between two places.
+     * @param toLat The goal latitude.
+     * @param toLon The goal longitude.
+     * @param fromLat The initial latitude.
+     * @param fromLon The initial longitude.
+     * @returns void
+     * @throws ApiError
+     */
+    public static getRoute(
+        toLat: number,
+        toLon: number,
+        fromLat: number,
+        fromLon: number,
+    ): CancelablePromise<void> {
+        return __request({
+            method: 'GET',
+            path: `/route`,
+            query: {
+                'toLat': toLat,
+                'toLon': toLon,
+                'fromLat': fromLat,
+                'fromLon': fromLon,
+            },
+        });
+    }
+
+    /**
      * searches the UVic campus based on a single search string
      * searches for buildings with a levenshteinDistance of 1 to the query string
      * @param query
