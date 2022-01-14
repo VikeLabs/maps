@@ -1,6 +1,6 @@
 <script lang="ts">
     import * as L from 'leaflet'
-    import {Marker} from 'leaflet'
+    import type {Marker} from 'leaflet'
     import MapSearch from "./MapSearch.svelte";
     import type {CancelablePromise, SearchResponse} from "../../api";
     import {Service} from "../../api";
