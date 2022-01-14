@@ -1,6 +1,5 @@
 plugins {
     kotlin("jvm") version "1.6.0"
-    id("org.jlleitschuh.gradle.ktlint") version "10.2.0"
     application
 }
 
@@ -9,7 +8,7 @@ version = "1.0-SNAPSHOT"
 
 application {
     applicationName = "maps"
-    mainClass.set("$group.maps.MainKt")
+    mainClass.set("$group.$applicationName.MainKt")
 }
 
 repositories {

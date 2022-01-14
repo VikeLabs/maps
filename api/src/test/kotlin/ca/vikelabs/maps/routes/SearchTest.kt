@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test
 
 class SearchTest : CachedNetworkTest() {
     val searchHandler = search(OpenStreetMapsOverpassMapData(client = cachedClient))
+    val application = application()
 
     @Test
     internal fun `check search exists`() {

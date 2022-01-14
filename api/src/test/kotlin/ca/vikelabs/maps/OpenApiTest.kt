@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(OpenApiApprovalTest::class)
 class OpenApiTest {
+    val application = application()
 
     @Test
     fun `check approved`(approver: Approver) {
