@@ -2,6 +2,7 @@ package ca.vikelabs.maps
 
 import ca.vikelabs.maps.data.impl.OpenStreetMapsOverpassMapData
 import ca.vikelabs.maps.routes.ping
+import ca.vikelabs.maps.routes.route
 import ca.vikelabs.maps.routes.search
 import mu.KotlinLogging
 import org.http4k.client.JavaHttpClient
@@ -17,8 +18,6 @@ import org.http4k.format.Jackson
 import org.http4k.traffic.ReadWriteCache
 
 private val logger = KotlinLogging.logger {}
-
-val application by lazy { application(Config()) }
 
 private val warnAndDefaultConfig by lazy {
     logger.info { "No configuration given to application. Using default config" }
@@ -51,5 +50,6 @@ fun application(
         descriptionPath = "/"
         routes += ping()
         routes += search(mapsData = OpenStreetMapsOverpassMapData(cachingJavaHttpClient))
+        routes += route()
     }
 }
