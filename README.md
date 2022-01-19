@@ -27,9 +27,11 @@ running, you can build the individual projects with `gradlew app:build` and `gra
 Two Dockerfiles (`api.Dockerfile` and `app.Dockerfile`) are tested every push. They run optimized builds and as a result
 are the best way to deploy the app in a long-running environment.
 
-## Database
+## Database Setup
 
 To set up the database you need docker installed.
+
+There is a readonly user (which is all you should need) with `username = uvic` and `password = uvic`. 
 
 ### Linux
 
