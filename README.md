@@ -27,6 +27,28 @@ running, you can build the individual projects with `gradlew app:build` and `gra
 Two Dockerfiles (`api.Dockerfile` and `app.Dockerfile`) are tested every push. They run optimized builds and as a result
 are the best way to deploy the app in a long-running environment.
 
+## Database
+
+To set up the database you need docker installed.
+
+### Linux
+
+```shell
+sudo docker build -t mapuvic -f db.Dockerfile .
+sudo docker run mapuvic -p "5432:5432"   
+```
+
+### Windows
+
+```shell
+# TODO
+```
+
+### Troubleshooting
+
+- Make sure your current directory is the root of the project.
+- Make sure there is nothing else running on port 5432.
+
 ### Some notes on gradle
 
 You can of course run everything here *without* gradle, you may want to directly run `npm` commands for example. I would

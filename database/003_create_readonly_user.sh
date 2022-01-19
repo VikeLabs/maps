@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -e
+
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
+    CREATE USER uvic WITH PASSWORD 'uvic';
+    GRANT CONNECT ON DATABASE mapuvic TO uvic;
+    GRANT SELECT ON ALL TABLES IN SCHEMA public TO uvic;
+    ALTER DEFAULT PRIVILEGES IN SCHEMA public
+        GRANT SELECT ON TABLES TO uvic;
+EOSQL
