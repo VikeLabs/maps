@@ -1,7 +1,9 @@
 package ca.vikelabs.maps
 
-import com.zaxxer.hikari.HikariConfig
-import com.zaxxer.hikari.HikariDataSource
+import com.fasterxml.jackson.databind.ObjectMapper
+import java.nio.file.Path
+import kotlin.io.path.Path
+import kotlin.io.path.exists
 import mu.KotlinLogging
 import org.http4k.core.Filter
 import org.http4k.core.then
@@ -10,63 +12,51 @@ import org.http4k.filter.ServerFilters
 
 private val logger = KotlinLogging.logger {}
 
+
 data class Config(
     val port: Int = 8000,
     val requestLogging: Boolean = true,
     val responseLogging: Boolean = true,
     val unsafeCors: Boolean = true,
-    val database: Database = Database()
+    val databaseUrl: String = "jdbc:postgresql://localhost:5432/mapuvic",
 ) {
-    init {
-        logger.info {
-            """CONFIGURATION:
-               port=$port
-               requestLogging=$requestLogging
-               responseLogging=$responseLogging
-               unsafeCors=$unsafeCors
-               database=$database
-            """.trimIndent()
-        }
-    }
-    data class Database(
-        val jdbcUrl: String = "jdbc:postgresql://localhost:5432/mapuvic",
-        val password: String = "uvic",
-        val username: String = "uvic",
-    ) {
-
-        val dataSource by lazy {
-            val config = HikariConfig()
-            config.jdbcUrl = jdbcUrl
-            config.password = password
-            config.username = username
-            HikariDataSource(config)
-        }
-    }
-
     companion object {
-        fun fromEnvironment(onFailure: (message: String) -> Config = FailureHandlers.warnAndDefault): Config {
-            val env = System.getenv()
-            return Config(
-                port = env["PORT"]?.toIntOrNull() ?: return onFailure("no PORT found in env"),
-                requestLogging = env["REQUEST_LOGGING"]?.equals("true")
-                    ?: return onFailure("No REQUEST_LOGGING found in env."),
-                responseLogging = env["RESPONSE_LOGGING"]?.equals("true")
-                    ?: return onFailure("No RESPONSE_LOGGING found in env."),
-                unsafeCors = env["UNSAFE_CORS"]?.equals("true") ?: return onFailure("No UNSAFE_CORS found in env."),
-                database = Database(
-                    env["DATABASE_JDBC_URL"] ?: return onFailure("No DATABASE_JDBC_URL found in env."),
-                    env["DATABASE_USERNAME"] ?: return onFailure("No DATABASE_USERNAME found in env."),
-                    env["DATABASE_PASSWORD"] ?: return onFailure("No DATABASE_PASSWORD found in env."),
-                )
-            )
+        fun fromArgs(
+            args: Array<String>,
+            onFailure: (message: String) -> Config = FailureHandlers.warnAndDefault,
+        ): Config {
+            val configPath = args
+                .asSequence()
+                .windowed(2, partialWindows = false)
+                .map { it[0] to it[1] }
+                .find { (key, _) -> key == "--config" }
+
+            return if (configPath != null) {
+                fromPath(Path(configPath.second), onFailure)
+            } else {
+                onFailure("Failed to find \"--config\" followed by a path.")
+            }
+        }
+
+        fun fromPath(
+            path: Path,
+            onFailure: (message: String) -> Config = FailureHandlers.warnAndDefault,
+        ): Config {
+            return if (path.exists()) {
+                ObjectMapper().readValue(path.toFile(), Config::class.java)
+            } else {
+                onFailure("\"$path\" does not exist")
+            }
         }
     }
 
     object FailureHandlers {
         val warnAndDefault = fun(message: String): Config {
-            logger.warn { message }
-            logger.warn { "Using default config." }
+            logger.warn { "$message Using default config." }
             return Config()
+        }
+        val throwWithMessage = fun(message: String): Nothing {
+            throw Exception("Initialization of config failed with: $message")
         }
     }
 
