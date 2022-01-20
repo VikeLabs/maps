@@ -31,13 +31,21 @@ are the best way to deploy the app in a long-running environment.
 
 To set up the database you need docker installed.
 
-There is a readonly user (which is all you should need) with `username = uvic` and `password = uvic`. 
+There is a readonly user (which is all you should need) with `username = uvic` and `password = uvic`.
 
 ### Linux
+
+Create the image:
 
 ```shell
 sudo docker build -t mapuvic -f db.Dockerfile .
 sudo docker run -p "5432:5432" mapuvic
+```
+
+Run the image:
+
+```shell
+sudo docker run -p "5432:5432" mapuvic   
 ```
 
 ### Windows
@@ -48,6 +56,7 @@ sudo docker run -p "5432:5432" mapuvic
 
 ### Troubleshooting
 
+- Make sure you have [docker](https://docs.docker.com/get-docker/) installed (WSL2 backend for windows)
 - Make sure your current directory is the root of the project.
 - Make sure there is nothing else running on port 5432.
 
