@@ -1,5 +1,3 @@
-import nu.studer.gradle.jooq.JooqGenerate
-
 plugins {
     kotlin("jvm") version "1.6.0"
     id("nu.studer.jooq") version "6.0.1"
@@ -16,10 +14,6 @@ application {
 
 repositories {
     mavenCentral()
-}
-
-object Versions {
-    const val jooq = "3.16.2"
 }
 
 dependencies {
@@ -39,10 +33,9 @@ dependencies {
     testImplementation(group = "org.jetbrains.kotlin", name = "kotlin-test-junit5")
 
     // database
-    implementation(group = "org.jooq", name = "jooq", version = Versions.jooq)
+    implementation(group = "org.jooq", name = "jooq", version = "3.16.2")
     implementation("org.postgresql:postgresql:42.2.14")
     jooqGenerator("org.postgresql:postgresql:42.2.14")
-    implementation(group = "com.zaxxer", name = "HikariCP", version = "5.0.1")
 
     // http4k testing
     testImplementation(group = "org.http4k", name = "http4k-testing-approval")
@@ -63,7 +56,6 @@ tasks.withType<Test> {
 }
 
 jooq {
-    version.set(Versions.jooq)
     configurations {
         create("main") {  // name of the jOOQ configuration
             jooqConfiguration.apply {
@@ -91,12 +83,4 @@ jooq {
             }
         }
     }
-}
-
-tasks.withType<JooqGenerate> {
-    outputs.dir(outputDir)
-    inputs.dir(rootProject.projectDir.resolve("database"))
-    inputs.file(rootProject.projectDir.resolve("db.Dockerfile"))
-    allInputsDeclared.set(true)
-    outputs.cacheIf { true }
 }
