@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm") version "1.6.0"
+    id("nu.studer.jooq") version "6.0.1"
     application
 }
 
@@ -31,6 +32,11 @@ dependencies {
     // testing
     testImplementation(group = "org.jetbrains.kotlin", name = "kotlin-test-junit5")
 
+    // database
+    implementation(group = "org.jooq", name = "jooq", version = "3.16.2")
+    implementation("org.postgresql:postgresql:42.2.14")
+    jooqGenerator("org.postgresql:postgresql:42.2.14")
+
     // http4k testing
     testImplementation(group = "org.http4k", name = "http4k-testing-approval")
     testImplementation(group = "org.http4k", name = "http4k-testing-hamkrest")
@@ -47,4 +53,34 @@ tasks.withType<Test> {
     }
     reports.html.required.set(false)
     reports.junitXml.required.set(false)
+}
+
+jooq {
+    configurations {
+        create("main") {  // name of the jOOQ configuration
+            jooqConfiguration.apply {
+                jdbc.apply {
+                    driver = "org.postgresql.Driver"
+                    url = "jdbc:postgresql://localhost:5432/mapuvic"
+                    user = "uvic"
+                    password = "uvic"
+                }
+                generator.apply {
+                    database.apply {
+                        name = "org.jooq.meta.postgres.PostgresDatabase"
+                        inputSchema = "public"
+                    }
+                    generate.apply {
+                        isRecords = true
+                        isImmutablePojos = true
+                        isFluentSetters = true
+                    }
+                    target.apply {
+                        packageName = "ca.vikelabs.maps.domain"
+                    }
+                    strategy.name = "org.jooq.codegen.DefaultGeneratorStrategy"
+                }
+            }
+        }
+    }
 }

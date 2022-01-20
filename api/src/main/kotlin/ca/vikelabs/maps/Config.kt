@@ -1,27 +1,29 @@
 package ca.vikelabs.maps
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import java.nio.file.Path
+import kotlin.io.path.Path
+import kotlin.io.path.exists
 import mu.KotlinLogging
 import org.http4k.core.Filter
 import org.http4k.core.then
 import org.http4k.filter.CorsPolicy
 import org.http4k.filter.ServerFilters
-import java.nio.file.Path
-import kotlin.io.path.Path
-import kotlin.io.path.exists
 
 private val logger = KotlinLogging.logger {}
+
 
 data class Config(
     val port: Int = 8000,
     val requestLogging: Boolean = true,
     val responseLogging: Boolean = true,
     val unsafeCors: Boolean = true,
+    val databaseUrl: String = "jdbc:postgresql://localhost:5432/mapuvic",
 ) {
     companion object {
         fun fromArgs(
             args: Array<String>,
-            onFailure: (message: String) -> Config = FailureHandlers.warnAndDefault
+            onFailure: (message: String) -> Config = FailureHandlers.warnAndDefault,
         ): Config {
             val configPath = args
                 .asSequence()
@@ -38,7 +40,7 @@ data class Config(
 
         fun fromPath(
             path: Path,
-            onFailure: (message: String) -> Config = FailureHandlers.warnAndDefault
+            onFailure: (message: String) -> Config = FailureHandlers.warnAndDefault,
         ): Config {
             return if (path.exists()) {
                 ObjectMapper().readValue(path.toFile(), Config::class.java)
