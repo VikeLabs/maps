@@ -13,4 +13,6 @@ interface MapData {
     }
 }
 
-data class Building(val name: String, val abbrName: String?, val bounds: List<Coordinate>)
+data class Building(val name: String, val abbrName: String?, val bounds: List<Coordinate>) {
+    val center by lazy { bounds.reduce { acc, coordinates -> acc + coordinates } / bounds.size }
+}

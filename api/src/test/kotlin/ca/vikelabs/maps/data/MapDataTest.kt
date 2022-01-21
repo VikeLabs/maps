@@ -32,7 +32,7 @@ class MapDataTest {
         val buildings = MapData().buildings()
         assertThat(
             buildings,
-            equalTo(buildings.distinctBy { it.name })
+            equalTo(buildings.distinct())
         )
     }
 }

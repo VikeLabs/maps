@@ -21,7 +21,7 @@ import org.http4k.hamkrest.hasStatus
 import org.junit.jupiter.api.Test
 
 class SearchTest : AbstractConfigTest() {
-    val searchHandler = search(MapData(config))
+    val searchHandler = Search(MapData(config))
     val application = application()
 
     @Test

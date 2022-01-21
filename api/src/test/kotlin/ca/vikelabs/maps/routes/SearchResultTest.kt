@@ -1,6 +1,7 @@
 package ca.vikelabs.maps.routes
 
 import ca.vikelabs.maps.data.Building
+import ca.vikelabs.maps.routes.Search.ResponseBody.SearchResult
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import com.natpryce.hamkrest.has

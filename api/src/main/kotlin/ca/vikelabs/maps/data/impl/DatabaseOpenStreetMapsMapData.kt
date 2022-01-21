@@ -36,17 +36,17 @@ class DatabaseOpenStreetMapsMapData(private val dataSource: DataSource) : MapDat
     }
 }
 
-// flattens nested collections to a single collections.
+// flattens nested collections to a single collections recursively.
 // Useful for arrays where there are differing levels of nesting
 private fun JsonNode.flattenR(): List<JsonNode> {
-    if (!this.isArray) {
+    if (!isArray) {
         throw Exception("called flattenR on something that was not an array")
     }
-    return if (this.isEmpty) {
+    return if (isEmpty) {
         emptyList()
-    } else if (this[0].isArray) {
-        this.map { it.flattenR() }.flatten()
+    } else if (get(0).isArray) {
+        map { it.flattenR() }.flatten()
     } else {
-        return this.toList()
+        return toList()
     }
 }
