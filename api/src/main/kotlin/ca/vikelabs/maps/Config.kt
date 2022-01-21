@@ -1,14 +1,16 @@
 package ca.vikelabs.maps
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import java.nio.file.Path
-import kotlin.io.path.Path
-import kotlin.io.path.exists
+import com.zaxxer.hikari.HikariConfig
+import com.zaxxer.hikari.HikariDataSource
 import mu.KotlinLogging
 import org.http4k.core.Filter
 import org.http4k.core.then
 import org.http4k.filter.CorsPolicy
 import org.http4k.filter.ServerFilters
+import java.nio.file.Path
+import kotlin.io.path.Path
+import kotlin.io.path.exists
 
 private val logger = KotlinLogging.logger {}
 
@@ -18,8 +20,29 @@ data class Config(
     val requestLogging: Boolean = true,
     val responseLogging: Boolean = true,
     val unsafeCors: Boolean = true,
-    val databaseUrl: String = "jdbc:postgresql://localhost:5432/mapuvic",
+    val database: Database = Database()
 ) {
+    data class Database(
+        val name: String = "mapuvic",
+        val username: String = "uvic",
+        val password: String = "uvic",
+        val dataSourceClassName: String = "org.postgresql.ds.PGSimpleDataSource"
+    ) {
+
+        val dataSource by lazy {
+            logger.info { "Initializing Hikari Datasource" }
+            val config = HikariConfig().apply {
+                dataSourceClassName = this@Database.dataSourceClassName
+                dataSource.apply {
+                    username = this@Database.username
+                    password = this@Database.password
+                    addDataSourceProperty("databaseName", this@Database.name)
+                }
+            }
+            HikariDataSource(config)
+        }
+    }
+
     companion object {
         fun fromArgs(
             args: Array<String>,

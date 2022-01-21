@@ -1,13 +1,15 @@
 package ca.vikelabs.maps.data
 
-import ca.vikelabs.maps.data.impl.OpenStreetMapsOverpassMapData
+import ca.vikelabs.maps.Config
+import ca.vikelabs.maps.data.impl.DatabaseOpenStreetMapsMapData
 import ca.vikelabs.maps.routes.Coordinate
 
 interface MapData {
     fun buildings(): List<Building>
 
     companion object {
-        operator fun invoke(): MapData = OpenStreetMapsOverpassMapData()
+        operator fun invoke(config: Config = Config()): MapData =
+            DatabaseOpenStreetMapsMapData(config.database.dataSource)
     }
 }
 

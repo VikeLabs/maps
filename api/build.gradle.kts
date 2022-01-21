@@ -36,6 +36,7 @@ dependencies {
     implementation(group = "org.jooq", name = "jooq", version = "3.16.2")
     implementation("org.postgresql:postgresql:42.2.14")
     jooqGenerator("org.postgresql:postgresql:42.2.14")
+    implementation(group = "com.zaxxer", name = "HikariCP", version = "5.0.1")
 
     // http4k testing
     testImplementation(group = "org.http4k", name = "http4k-testing-approval")
@@ -56,6 +57,7 @@ tasks.withType<Test> {
 }
 
 jooq {
+    version.set("3.16.1")
     configurations {
         create("main") {  // name of the jOOQ configuration
             jooqConfiguration.apply {
