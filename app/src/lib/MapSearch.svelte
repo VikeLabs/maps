@@ -12,8 +12,7 @@
     if (text.length > 2) {
         dispatch(Events.Search, {text})
     }
-}} on:dblclick={() => {
+}} on:dblclick={(event) => {
     event.stopPropagation();
-    return false;
 }
 }>
