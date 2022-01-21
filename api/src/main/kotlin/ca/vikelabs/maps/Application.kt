@@ -1,6 +1,6 @@
 package ca.vikelabs.maps
 
-import ca.vikelabs.maps.data.impl.OpenStreetMapsOverpassMapData
+import ca.vikelabs.maps.data.impl.DatabaseOpenStreetMapsMapData
 import ca.vikelabs.maps.routes.ping
 import ca.vikelabs.maps.routes.route
 import ca.vikelabs.maps.routes.search
@@ -24,10 +24,6 @@ private val warnAndDefaultConfig by lazy {
     Config()
 }
 
-private val cachingJavaHttpClient = TrafficFilters.RecordTo(ReadWriteCache.Disk("cache"))
-    .then(TrafficFilters.ServeCachedFrom(ReadWriteCache.Disk("cache")))
-    .then(JavaHttpClient())
-
 fun application(
     config: Config = warnAndDefaultConfig
 ): HttpHandler {
@@ -49,7 +45,7 @@ fun application(
         )
         descriptionPath = "/"
         routes += ping()
-        routes += search(mapsData = OpenStreetMapsOverpassMapData(cachingJavaHttpClient))
+        routes += search(mapsData = DatabaseOpenStreetMapsMapData(config.database.dataSource))
         routes += route()
     }
 }

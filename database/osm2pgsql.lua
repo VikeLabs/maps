@@ -1,9 +1,9 @@
 local tables = {}
 
-tables.point = osm2pgsql.define_node_table('point', {
+tables.point = osm2pgsql.define_node_table('uvic_point', {
     { column = 'name', type = 'text', not_null = true },
     { column = 'abbr_name', type = 'text' },
-    { column = 'geom', type = 'point' },
+    { column = 'geom', type = 'point', projection = 'latlon'  },
 })
 
 function osm2pgsql.process_node(object)
@@ -18,10 +18,10 @@ function osm2pgsql.process_node(object)
     end
 end
 
-tables.way = osm2pgsql.define_way_table('way', {
+tables.way = osm2pgsql.define_way_table('uvic_way', {
     { column = 'name', type = 'text', not_null = true },
     { column = 'abbr_name', type = 'text' },
-    { column = 'geom', type = 'linestring' },
+    { column = 'geom', type = 'linestring', projection = 'latlon'  },
 })
 
 function osm2pgsql.process_way(object)
@@ -36,10 +36,10 @@ function osm2pgsql.process_way(object)
     end
 end
 
-tables.area = osm2pgsql.define_area_table('area', {
+tables.area = osm2pgsql.define_area_table('uvic_area', {
     { column = 'name', type = 'text', not_null = true },
     { column = 'abbr_name', type = 'text' },
-    { column = 'geom', type = 'geometry' },
+    { column = 'geom', type = 'geometry', projection = 'latlon' },
 })
 
 function osm2pgsql.process_relation(object)
