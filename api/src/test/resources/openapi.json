@@ -31,9 +31,7 @@
                                     "success": true
                                 },
                                 "schema": {
-                                    "$ref": "#/components/schemas/Success",
-                                    "example": null,
-                                    "description": null
+                                    "$ref": "#/components/schemas/PingResponseBody"
                                 }
                             }
                         }
@@ -48,7 +46,6 @@
         "/route": {
             "get": {
                 "summary": "Route between two places.",
-                "description": null,
                 "tags": [
                     ""
                 ],
@@ -112,8 +109,7 @@
                         },
                         "in": "query",
                         "name": "query",
-                        "required": true,
-                        "description": null
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -133,9 +129,7 @@
                                     ]
                                 },
                                 "schema": {
-                                    "$ref": "#/components/schemas/SearchResponse",
-                                    "example": null,
-                                    "description": null
+                                    "$ref": "#/components/schemas/SearchResponseBody"
                                 }
                             }
                         }
@@ -150,28 +144,26 @@
     },
     "components": {
         "schemas": {
-            "Success": {
+            "PingResponseBody": {
                 "properties": {
                     "success": {
                         "example": true,
-                        "description": null,
                         "type": "boolean"
                     }
                 },
                 "example": {
                     "success": true
                 },
-                "description": null,
                 "type": "object",
                 "required": [
                     "success"
                 ]
             },
-            "SearchResponse": {
+            "SearchResponseBody": {
                 "properties": {
                     "results": {
                         "items": {
-                            "$ref": "#/components/schemas/SearchResult"
+                            "$ref": "#/components/schemas/ResponseBodySearchResult"
                         },
                         "example": [
                             {
@@ -182,7 +174,6 @@
                                 }
                             }
                         ],
-                        "description": null,
                         "type": "array"
                     }
                 },
@@ -197,23 +188,19 @@
                         }
                     ]
                 },
-                "description": null,
                 "type": "object",
                 "required": [
                     "results"
                 ]
             },
-            "SearchResult": {
+            "ResponseBodySearchResult": {
                 "properties": {
                     "name": {
                         "example": "Elliott Building",
-                        "description": null,
                         "type": "string"
                     },
                     "center": {
-                        "$ref": "#/components/schemas/Coordinate",
-                        "example": null,
-                        "description": null
+                        "$ref": "#/components/schemas/Coordinate"
                     }
                 },
                 "example": {
@@ -223,7 +210,6 @@
                         "longitude": -123.3108017
                     }
                 },
-                "description": null,
                 "type": "object",
                 "required": [
                     "center",
@@ -234,12 +220,10 @@
                 "properties": {
                     "latitude": {
                         "example": 48.4627526,
-                        "description": null,
                         "type": "number"
                     },
                     "longitude": {
                         "example": -123.3108017,
-                        "description": null,
                         "type": "number"
                     }
                 },
@@ -247,7 +231,6 @@
                     "latitude": 48.4627526,
                     "longitude": -123.3108017
                 },
-                "description": null,
                 "type": "object",
                 "required": [
                     "latitude",

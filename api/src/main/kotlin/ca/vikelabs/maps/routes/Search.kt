@@ -3,12 +3,12 @@ package ca.vikelabs.maps.routes
 import ca.vikelabs.maps.data.Building
 import ca.vikelabs.maps.data.MapData
 import ca.vikelabs.maps.extensions.levenshteinDistanceTo
-import org.http4k.contract.ContractRoute
+import ca.vikelabs.maps.routes.Search.ResponseBody.SearchResult
 import org.http4k.contract.meta
 import org.http4k.core.Body
-import org.http4k.core.ContentType
 import org.http4k.core.HttpHandler
 import org.http4k.core.Method
+import org.http4k.core.Request
 import org.http4k.core.Response
 import org.http4k.core.Status
 import org.http4k.core.with
@@ -16,39 +16,45 @@ import org.http4k.format.Jackson.auto
 import org.http4k.lens.Query
 import org.http4k.lens.nonEmptyString
 
-object Search {
-    val query = Query.nonEmptyString().required("query")
-    val response = Body.auto<SearchResponse>().toLens()
-}
+class Search(private val mapData: MapData = MapData()) : HttpHandler {
+    data class ResponseBody(val results: List<SearchResult>) {
+        data class SearchResult(val name: String, val center: Coordinate) {
+            constructor(building: Building) : this(
+                name = building.name,
+                center = building.center
+            )
+        }
+    }
 
-fun search(
-    mapsData: MapData = MapData()
-): ContractRoute {
+    companion object {
+        val query = Query.nonEmptyString().required("query")
+        val response = Body.auto<ResponseBody>().toLens()
 
-    val spec = "search" meta {
-        summary = "searches the UVic campus based on a single search string"
-        description = "searches for buildings with a levenshteinDistance of 1 to the query string"
-        queries += Search.query
-        produces += ContentType.APPLICATION_JSON
-        returning(
-            Status.OK,
-            Search.response to SearchResponse(
-                listOf(SearchResult("Elliott Building", Coordinate(48.4627526, -123.3108017)))
-            ),
-            "a single result"
-        )
-    } bindContract Method.GET
+        val spec = "search" meta {
+            summary = "searches the UVic campus based on a single search string"
+            description = "searches for buildings with a levenshteinDistance of 1 to the query string"
+            queries += query
+            returning(
+                Status.OK,
+                response to ResponseBody(
+                    listOf(SearchResult("Elliott Building", Coordinate(48.4627526, -123.3108017)))
+                ),
+                "a single result"
+            )
+        } bindContract Method.GET
+    }
 
-    val search: HttpHandler = { request ->
-        val query = Search.query(request)
-        val searchResults = mapsData
+    val contractRoute = spec to ::search
+    override fun invoke(request: Request) = contractRoute(request)
+
+    private fun search(): HttpHandler = { request ->
+        val query = query(request)
+        val searchResults = mapData
             .buildings()
             .filter { searchMatches(it, query) }
             .map { SearchResult(it) }
-        Response(Status.OK).with(Search.response of SearchResponse(results = searchResults))
+        Response(Status.OK).with(response of ResponseBody(results = searchResults))
     }
-
-    return spec to search
 }
 
 private fun searchMatches(it: Building, query: String): Boolean {
@@ -79,14 +85,5 @@ data class Coordinate(val latitude: Double, val longitude: Double) {
     operator fun div(lhs: Number) = Coordinate(
         latitude = latitude / lhs.toDouble(),
         longitude = longitude / lhs.toDouble()
-    )
-}
-
-data class SearchResponse(val results: List<SearchResult>)
-
-data class SearchResult(val name: String, val center: Coordinate) {
-    constructor(building: Building) : this(
-        name = building.name,
-        center = building.bounds.reduce { acc, coordinates -> acc + coordinates } / building.bounds.size
     )
 }
