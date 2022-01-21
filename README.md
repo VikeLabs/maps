@@ -37,7 +37,7 @@ There is a readonly user (which is all you should need) with `username = uvic` a
 
 ```shell
 sudo docker build -t mapuvic -f db.Dockerfile .
-sudo docker run mapuvic -p "5432:5432"   
+sudo docker run -p "5432:5432" mapuvic
 ```
 
 ### Windows
