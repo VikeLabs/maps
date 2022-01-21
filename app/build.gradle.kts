@@ -60,5 +60,9 @@ tasks {
     check {
         dependsOn(validate)
     }
-}
 
+    clean {
+        delete("dist")
+        delete("node_modules")
+    }
+}
