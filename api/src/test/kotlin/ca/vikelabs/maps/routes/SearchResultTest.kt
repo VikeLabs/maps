@@ -1,7 +1,7 @@
 package ca.vikelabs.maps.routes
 
 import ca.vikelabs.maps.data.Building
-import ca.vikelabs.maps.routes.Search.ResponseBody.SearchResult
+import ca.vikelabs.maps.routes.Search.ResponseBody
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import com.natpryce.hamkrest.has
@@ -11,7 +11,7 @@ internal class SearchResultTest {
     @Test
     internal fun `check search result gets correct center`() {
         assertThat(
-            SearchResult(
+            ResponseBody.Building(
                 Building(
                     "A building", null,
                     listOf(

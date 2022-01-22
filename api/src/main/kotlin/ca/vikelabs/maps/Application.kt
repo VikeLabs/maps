@@ -1,9 +1,9 @@
 package ca.vikelabs.maps
 
 import ca.vikelabs.maps.data.impl.DatabaseOpenStreetMapsMapData
+import ca.vikelabs.maps.routes.Ping
 import ca.vikelabs.maps.routes.Route
 import ca.vikelabs.maps.routes.Search
-import ca.vikelabs.maps.routes.Ping
 import mu.KotlinLogging
 import org.http4k.contract.contract
 import org.http4k.contract.openapi.ApiInfo
@@ -38,7 +38,7 @@ fun application(
                 json = OpenAPIJackson,
                 schema = AutoJsonToJsonSchema(
                     OpenAPIJackson,
-                    modelNamer = { "${it.javaClass.enclosingClass?.simpleName ?: ""}${it.javaClass.simpleName}" }
+                    modelNamer = { appendEnclosingClass(it.javaClass) }
                 )
             ),
             servers = listOf(
@@ -54,3 +54,8 @@ fun application(
         routes += Route().contractRoute
     }
 }
+
+
+private fun appendEnclosingClass(clazz: Class<*>): String =
+    if (clazz.enclosingClass != null) appendEnclosingClass(clazz.enclosingClass) + clazz.simpleName
+    else clazz.simpleName

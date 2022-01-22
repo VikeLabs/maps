@@ -2,7 +2,7 @@
     import * as L from 'leaflet'
     import type {Marker} from 'leaflet'
     import MapSearch from "./MapSearch.svelte";
-    import type {CancelablePromise, SearchResponse} from "../../api";
+    import type {CancelablePromise, SearchResponseBody} from "../../api";
     import {Service} from "../../api";
     import {toast} from "@zerodevx/svelte-toast";
     import config from "../config.json"
@@ -14,7 +14,7 @@
 
     searchbar.onAdd = (map: L.Map): HTMLElement => {
         const div = L.DomUtil.create('div');
-        let searchResponsePromise: CancelablePromise<SearchResponse>
+        let searchResponsePromise: CancelablePromise<SearchResponseBody>
         mapSearch = new MapSearch({
             target: div,
             props: {}

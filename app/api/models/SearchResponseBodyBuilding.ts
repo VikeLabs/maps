@@ -4,7 +4,7 @@
 
 import type { Coordinate } from './Coordinate';
 
-export type SearchResult = {
+export type SearchResponseBodyBuilding = {
     name: string;
     center: Coordinate;
 }

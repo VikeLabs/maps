@@ -1,9 +1,7 @@
 package ca.vikelabs.maps.routes
 
-import ca.vikelabs.maps.data.Building
 import ca.vikelabs.maps.data.MapData
 import ca.vikelabs.maps.extensions.levenshteinDistanceTo
-import ca.vikelabs.maps.routes.Search.ResponseBody.SearchResult
 import org.http4k.contract.meta
 import org.http4k.core.Body
 import org.http4k.core.HttpHandler
@@ -17,9 +15,9 @@ import org.http4k.lens.Query
 import org.http4k.lens.nonEmptyString
 
 class Search(private val mapData: MapData = MapData()) : HttpHandler {
-    data class ResponseBody(val results: List<SearchResult>) {
-        data class SearchResult(val name: String, val center: Coordinate) {
-            constructor(building: Building) : this(
+    data class ResponseBody(val results: List<Building>) {
+        data class Building(val name: String, val center: Coordinate) {
+            constructor(building: ca.vikelabs.maps.data.Building) : this(
                 name = building.name,
                 center = building.center
             )
@@ -37,7 +35,7 @@ class Search(private val mapData: MapData = MapData()) : HttpHandler {
             returning(
                 Status.OK,
                 response to ResponseBody(
-                    listOf(SearchResult("Elliott Building", Coordinate(48.4627526, -123.3108017)))
+                    listOf(ResponseBody.Building("Elliott Building", Coordinate(48.4627526, -123.3108017)))
                 ),
                 "a single result"
             )
@@ -52,12 +50,12 @@ class Search(private val mapData: MapData = MapData()) : HttpHandler {
         val searchResults = mapData
             .buildings()
             .filter { searchMatches(it, query) }
-            .map { SearchResult(it) }
+            .map { ResponseBody.Building(it) }
         Response(Status.OK).with(response of ResponseBody(results = searchResults))
     }
 }
 
-private fun searchMatches(it: Building, query: String): Boolean {
+private fun searchMatches(it: ca.vikelabs.maps.data.Building, query: String): Boolean {
     val lowercaseName = it.name.lowercase()
     val lowercaseQuery = query.lowercase()
 

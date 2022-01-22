@@ -163,7 +163,7 @@
                 "properties": {
                     "results": {
                         "items": {
-                            "$ref": "#/components/schemas/ResponseBodySearchResult"
+                            "$ref": "#/components/schemas/SearchResponseBodyBuilding"
                         },
                         "example": [
                             {
@@ -193,7 +193,7 @@
                     "results"
                 ]
             },
-            "ResponseBodySearchResult": {
+            "SearchResponseBodyBuilding": {
                 "properties": {
                     "name": {
                         "example": "Elliott Building",

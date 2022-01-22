@@ -2,6 +2,6 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type Success = {
+export type PingResponseBody = {
     success: boolean;
 }

@@ -1,0 +1,17 @@
+services:
+  db:
+    build:
+      dockerfile: db.Dockerfile
+      context: .
+  app:
+    build:
+      dockerfile: app.Dockerfile
+      context: .
+  api:
+    build:
+      dockerfile: api.Dockerfile
+      context: .
+    expose:
+      - 5000:5000
+    depends_on:
+      - db
