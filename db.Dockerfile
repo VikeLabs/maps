@@ -13,6 +13,7 @@ RUN wget -q -O 'uvic.xml' 'https://www.openstreetmap.org/api/0.6/map?bbox=-123.3
 ENV POSTGRES_USER "mapuvic"
 ENV POSTGRES_PASSWORD "mapuvic"
 ENV POSTGRES_DB "mapuvic"
+HEALTHCHECK CMD ["CMD-SHELL", "pg_isready"]
 
 COPY database/* /docker-entrypoint-initdb.d/
 

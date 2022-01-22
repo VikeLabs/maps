@@ -94,8 +94,9 @@ jooq {
 }
 
 tasks.withType<JooqGenerate> {
-    inputs.file(projectDir.resolve("database"))
-    inputs.file(projectDir.resolve("db.Dockerfile"))
+    outputs.dir(outputDir)
+    inputs.dir(rootProject.projectDir.resolve("database"))
+    inputs.file(rootProject.projectDir.resolve("db.Dockerfile"))
     allInputsDeclared.set(true)
     outputs.cacheIf { true }
 }
