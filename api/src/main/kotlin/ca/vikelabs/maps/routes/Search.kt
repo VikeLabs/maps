@@ -2,6 +2,7 @@ package ca.vikelabs.maps.routes
 
 import ca.vikelabs.maps.data.MapData
 import ca.vikelabs.maps.extensions.levenshteinDistanceTo
+import ca.vikelabs.maps.routes.Search.ResponseBody.Building
 import org.http4k.contract.meta
 import org.http4k.core.Body
 import org.http4k.core.HttpHandler
@@ -13,11 +14,12 @@ import org.http4k.core.with
 import org.http4k.format.Jackson.auto
 import org.http4k.lens.Query
 import org.http4k.lens.nonEmptyString
+import ca.vikelabs.maps.data.Building as MapsDataBuilding
 
 class Search(private val mapData: MapData = MapData()) : HttpHandler {
     data class ResponseBody(val results: List<Building>) {
         data class Building(val name: String, val center: Coordinate) {
-            constructor(building: ca.vikelabs.maps.data.Building) : this(
+            constructor(building: MapsDataBuilding) : this(
                 name = building.name,
                 center = building.center
             )
@@ -35,7 +37,7 @@ class Search(private val mapData: MapData = MapData()) : HttpHandler {
             returning(
                 Status.OK,
                 response to ResponseBody(
-                    listOf(ResponseBody.Building("Elliott Building", Coordinate(48.4627526, -123.3108017)))
+                    listOf(Building("Elliott Building", Coordinate(48.4627526, -123.3108017)))
                 ),
                 "a single result"
             )
@@ -50,18 +52,18 @@ class Search(private val mapData: MapData = MapData()) : HttpHandler {
         val searchResults = mapData
             .buildings()
             .filter { searchMatches(it, query) }
-            .map { ResponseBody.Building(it) }
+            .map { Building(it) }
         Response(Status.OK).with(response of ResponseBody(results = searchResults))
     }
 }
 
-private fun searchMatches(it: ca.vikelabs.maps.data.Building, query: String): Boolean {
-    val lowercaseName = it.name.lowercase()
+private fun searchMatches(building: MapsDataBuilding, query: String): Boolean {
+    val lowercaseName = building.name.lowercase()
     val lowercaseQuery = query.lowercase()
 
     val wholeNameMatches = lowercaseName.levenshteinDistanceTo(lowercaseQuery) <= 1
 
-    val abbrNameEqual = it.abbrName?.lowercase() == lowercaseQuery
+    val abbrNameEqual = building.abbrName?.lowercase() == lowercaseQuery
 
     val anyNameWordMatchesAnyQueryWord = lowercaseName
         .split(' ')
