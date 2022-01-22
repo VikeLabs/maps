@@ -47,6 +47,6 @@ private fun JsonNode.flattenR(): List<JsonNode> {
     } else if (get(0).isArray) {
         map { it.flattenR() }.flatten()
     } else {
-        return toList()
+        toList()
     }
 }
