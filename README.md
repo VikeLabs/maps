@@ -27,6 +27,15 @@ running, you can build the individual projects with `gradlew app:build` and `gra
 Two Dockerfiles (`api.Dockerfile` and `app.Dockerfile`) are tested every push. They run optimized builds and as a result
 are the best way to deploy the app in a long-running environment.
 
+```shell
+docker build -t mapuvic-db -f db.Dockerfile .
+docker run -p "5432:5432" mapuvic-db 
+docker build -t mapuvic-backend --network=host -f api.Dockerfile . 
+docker run -p "8000:8000" --network=host mapuvic-backend
+docker build -t mapuvic-frontend -f app.Dockerfile .
+docker run -p "5000:5000"mapuvic-fronten
+```
+
 ## Database Setup
 
 To set up the database you need docker installed.

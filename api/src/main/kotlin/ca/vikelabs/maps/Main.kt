@@ -7,8 +7,8 @@ import org.http4k.server.asServer
 
 private val logger = KotlinLogging.logger {}
 
-fun main(args: Array<String>) {
-    val configuration = Config.fromArgs(args)
+fun main() {
+    val configuration = Config.fromEnvironment()
     configuration.filters.then(application(configuration))
         .asServer(Jetty(configuration.port))
         .start()
