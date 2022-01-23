@@ -28,6 +28,7 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
+          registry: ghcr.io
           file: db.Dockerfile
           context: .
           push: true
