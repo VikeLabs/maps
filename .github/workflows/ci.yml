@@ -30,8 +30,3 @@ jobs:
       - 
         name: build app
         run: gradle app:build
-        env:
-          DATABASE_SERVER_NAME: postgres
-    
- 
-      
