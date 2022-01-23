@@ -13,6 +13,8 @@ jobs:
     services:
       database:
         image: quality11/mapuvic-database:0.0.1
+        ports:
+          - 5432:5432
     steps:
       - 
         name: checkout maps
@@ -22,6 +24,7 @@ jobs:
         run: gradle api:build
         env:
           DATABASE_SERVER_NAME: postgres
+          DATABASE_PORT: 5432
   build-frontend:
     runs-on: ubuntu-latest
     container: gradle:7.3.3-jdk11
