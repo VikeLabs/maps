@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build-backend:
+    runs-on: ubuntu-latest
+    container: gradle:7.3.3-jdk11
+    services:
+      database:
+        image: quality11/mapuvic-database:0.0.1
+    steps:
+      - 
+        name: checkout maps
+        uses: actions/checkout@v2.4.0
+      - 
+        name: build api
+        run: gradle api:build
+  build-frontend:
+    runs-on: ubuntu-latest
+    container: gradle:7.3.3-jdk11
+    steps:
+      - 
+        name: checkout maps
+        uses: actions/checkout@v2.4.0
+      - 
+        name: build app
+        run: gradle app:build
+    
+ 
+      
