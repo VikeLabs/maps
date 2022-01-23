@@ -20,6 +20,8 @@ jobs:
       - 
         name: build api
         run: gradle api:build
+        env:
+          DATABASE_SERVER_NAME: postgres
   build-frontend:
     runs-on: ubuntu-latest
     container: gradle:7.3.3-jdk11
@@ -30,3 +32,8 @@ jobs:
       - 
         name: build app
         run: gradle app:build
+
+    
+ 
+      
+
