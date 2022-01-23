@@ -1,6 +1,10 @@
 package ca.vikelabs.maps.routes
 
 import ca.vikelabs.maps.application
+import ca.vikelabs.maps.routes.Route.Companion.fromLatQuery
+import ca.vikelabs.maps.routes.Route.Companion.fromLonQuery
+import ca.vikelabs.maps.routes.Route.Companion.toLatQuery
+import ca.vikelabs.maps.routes.Route.Companion.toLonQuery
 import com.natpryce.hamkrest.assertion.assertThat
 import org.http4k.core.Method
 import org.http4k.core.Request
@@ -25,6 +29,6 @@ class RoutingTest {
                 fromLatQuery of 2.1,
                 fromLonQuery of 2.1
             )
-        assertThat(route()(request), hasStatus(BAD_REQUEST).not())
+        assertThat(Route()(request), hasStatus(BAD_REQUEST).not())
     }
 }

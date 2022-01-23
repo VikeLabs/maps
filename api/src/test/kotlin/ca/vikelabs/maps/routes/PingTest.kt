@@ -1,9 +1,8 @@
 package ca.vikelabs.maps.routes
 
+import ca.vikelabs.maps.routes.Ping.Companion.spec
 import com.natpryce.hamkrest.assertion.assertThat
 import org.http4k.core.ContentType
-import org.http4k.core.Method
-import org.http4k.core.Request
 import org.http4k.core.Status
 import org.http4k.hamkrest.hasContentType
 import org.http4k.hamkrest.hasStatus
@@ -14,21 +13,20 @@ import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(JsonApprovalTest::class)
 class PingTest {
-    val ping = ping()
+    val ping = Ping()
 
     @Test
     fun `check status`() {
-
-        assertThat(ping(Request(Method.GET, "/ping")), hasStatus(Status.OK))
+        assertThat(ping(spec.newRequest()), hasStatus(Status.OK))
     }
 
     @Test
     fun `check content type`() {
-        assertThat(ping(Request(Method.GET, "/ping")), hasContentType(ContentType.APPLICATION_JSON))
+        assertThat(ping(spec.newRequest()), hasContentType(ContentType.APPLICATION_JSON))
     }
 
     @Test
     fun `check approved`(approver: Approver) {
-        approver.assertApproved(ping(Request(Method.GET, "/ping")))
+        approver.assertApproved(ping(spec.newRequest()))
     }
 }

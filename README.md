@@ -2,57 +2,57 @@
 
 # maps
 
-This is a [VikeLabs](https://www.vikelabs.ca/) project meant for navigating around UVic. It's structured as a
-multi-module gradle project with an api server and a web app (in `api` and `app` respectively). You can find out more
-about the details of those modules in their respective `README.md`'s.
+This is a [VikeLabs](https://www.vikelabs.ca/) project meant for navigating around the University of Victoria.
 
-## Running
+## Contributing
 
-You can run the backend with `gradlew api:run` and the frontend with `gradlew app:dev` (`run` also works but dev gives
-nice hot loading features). This should install dependencies you do not already have, so it may take a while first time!
+If you are new to open-source, this is a great place to start!
 
-## Testing
+Contributions are welcome, information about contributing to the backend and frontend respectivly are found
+in `app/README.md` and `api/README.md`.
+___
 
-You can test everything at once with `gradlew test`. Or individual projects with `gradlew app:test`
-or `gradlew api:test`. I recommend also running `gradlew check` before every push as it runs potentially more tests as
-well as linters and such but may be slower as a result.
+#### 1. Find an issue that you feel that you can tackle
 
-## Building
+Ones labeled "Good first Issue" are good places to start.
 
-You can build both projects (producing an optimized app and a jar file) with `gradlew build`. Similar to testing and
-running, you can build the individual projects with `gradlew app:build` and `gradlew api:build`
+#### 3. Say you are interested in working on the issue
 
-## Deploying
+In order to make sure two people aren't doing the same thing at once, add a comment to the issue saying you are
+interested in working on it.
 
-Two Dockerfiles (`api.Dockerfile` and `app.Dockerfile`) are tested every push. They run optimized builds and as a result
-are the best way to deploy the app in a long-running environment.
+#### 4. Fork the repository
 
-## Database Setup
+There is a button in the top right of the GitHub repository that says fork, click it! This will create an exact copy of
+this repository but in your own GitHub account.
 
-To set up the database you need docker installed.
+#### 5. Clone your repository
 
-There is a readonly user (which is all you should need) with `username = uvic` and `password = uvic`. 
+`git clone https://github.com/YOUR_GITHUB_USERNAME/maps`
 
-### Linux
+#### 6. Fix the issue!
 
-```shell
-sudo docker build -t mapuvic -f db.Dockerfile .
-sudo docker run -p "5432:5432" mapuvic
-```
+This is the hard part, but if you are confused with anything or want some pointers on how to fix it, feel free to ask in
+the issue thread.
 
-### Windows
+#### 7. Add the files you committed to the staging area
 
-```shell
-# TODO
-```
+`git add THE_FIXED_FILES`
 
-### Troubleshooting
+#### 8. Commit the staged files
 
-- Make sure your current directory is the root of the project.
-- Make sure there is nothing else running on port 5432.
+`git commit -m "some nice message here"`
 
-### Some notes on gradle
+#### 9. Push your changes!
 
-You can of course run everything here *without* gradle, you may want to directly run `npm` commands for example. I would
-recommend against it as there is a curated dependency graph for tasks with gradle whereas for npm you are on your own.
-If any mentioned gradle commands fail for any reason beyond broken code, that is a bug and should be filed as such.
+`git push`
+
+#### 11. Contribute the changes
+
+There should be a nice green button labeled Contribute in *your* repository. Click it and attach a title and description
+describing what you have done. If you have some changes and are looking for feedback or help, mention that in the
+description.
+
+#### 12. Wait for someone to look over the changes and merge them.
+
+There are automatic tests and a required code review, if everything is in ship shape, the change will be merged. 

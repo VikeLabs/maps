@@ -10,7 +10,7 @@ repositories {
 }
 
 node {
-    version.set("16.13.0")
+    version.set("17.4.0")
     download.set(true)
 }
 
@@ -52,8 +52,6 @@ tasks {
     }
 
     assemble {
-        dependsOn(npmInstall)
-        dependsOn(generateClient)
         dependsOn(buildProd)
     }
 
