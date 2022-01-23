@@ -4,7 +4,7 @@ This is the backend for the app. It provides mapping data, search results and ro
 
 ## Running
 
-`gradlew api:run` will run the server.
+`gradlew api:run` will run the server. Note you will need a postgres database running. Runnning the image created by db.Dockerfile should do it.
 
 ## Testing
 
