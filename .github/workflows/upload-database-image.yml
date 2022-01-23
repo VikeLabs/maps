@@ -1,0 +1,29 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+  
+jobs:
+  create-and-upload:
+    runs-on: ubuntu-latest
+    steps:
+     - name: Log in to the Container registry
+        uses: docker/login-action
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: checkout repository
+      uses: actions/checkout@v2
+      
+    - name: Build and push Docker image
+        uses: docker/build-push-action
+        with:
+          file: db.Dockerfile
+          context: .
+          push: true
+          tags: mapuvic/db:latest
+          
