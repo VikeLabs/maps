@@ -62,6 +62,9 @@ tasks.withType<Test> {
     reports.junitXml.required.set(false)
 }
 
+fun Map<String, String>.getOrLogAndDefault(key: String, default: String) =
+    this[key] ?: run { println("No $key found in environment. Defaulting to $default"); default }
+
 jooq {
     val env = System.getenv()
     version.set(Version.jooq)
@@ -71,9 +74,21 @@ jooq {
                 jdbc.apply {
                     driver = "org.postgresql.Driver"
                     url =
-                        "jdbc:postgresql://${env["DATABASE_SERVER_NAME"] ?: "localhost"}:${env["DATABASE_PORT"] ?: "5432"}/${env["DATABASE_NAME"] ?: "mapuvic"}"
-                    user = env["DATABASE_USERNAME"] ?: "uvic"
-                    password = env["DATABASE_PASSWORD"] ?: "uvic"
+                        "jdbc:postgresql://${
+                            env.getOrLogAndDefault(
+                                "DATABASE_SERVER_NAME",
+                                "localhost"
+                            )
+                        }:${
+                            env.getOrLogAndDefault("DATABASE_PORT", "5432")
+                        }/${
+                            env.getOrLogAndDefault(
+                                "DATABASE_NAME",
+                                "mapuvic"
+                            )
+                        }"
+                    user = env.getOrLogAndDefault("DATABASE_USERNAME", "uvic")
+                    password = env.getOrLogAndDefault("DATABASE_PASSWORD", "uvic")
                 }
                 generator.apply {
                     database.apply {
