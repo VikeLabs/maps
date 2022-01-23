@@ -18,6 +18,10 @@ repositories {
     mavenCentral()
 }
 
+object Version {
+    const val jooq = "3.16.2"
+}
+
 dependencies {
     // http4k
     implementation(platform("org.http4k:http4k-bom:4.17.2.0"))
@@ -35,7 +39,7 @@ dependencies {
     testImplementation(group = "org.jetbrains.kotlin", name = "kotlin-test-junit5")
 
     // database
-    implementation(group = "org.jooq", name = "jooq", version = "3.16.2")
+    implementation(group = "org.jooq", name = "jooq", version = Version.jooq)
     implementation("org.postgresql:postgresql:42.2.14")
     jooqGenerator("org.postgresql:postgresql:42.2.14")
     implementation("com.zaxxer:HikariCP:5.0.1")
@@ -60,6 +64,7 @@ tasks.withType<Test> {
 
 jooq {
     val env = System.getenv()
+    version.set(Version.jooq)
     configurations {
         create("main") {  // name of the jOOQ configuration
             jooqConfiguration.apply {
