@@ -9,7 +9,7 @@ interface MapData {
 
     companion object {
         operator fun invoke(config: Config = Config()): MapData =
-            DatabaseOpenStreetMapsMapData(config.database.dataSource)
+            DatabaseOpenStreetMapsMapData(config.dataSource)
     }
 }
 

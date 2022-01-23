@@ -1,3 +1,5 @@
+import nu.studer.gradle.jooq.JooqGenerate
+
 plugins {
     kotlin("jvm") version "1.6.0"
     id("nu.studer.jooq") version "6.0.1"
@@ -36,6 +38,7 @@ dependencies {
     implementation(group = "org.jooq", name = "jooq", version = "3.16.2")
     implementation("org.postgresql:postgresql:42.2.14")
     jooqGenerator("org.postgresql:postgresql:42.2.14")
+    implementation("com.zaxxer:HikariCP:5.0.1")
 
     // http4k testing
     testImplementation(group = "org.http4k", name = "http4k-testing-approval")
@@ -56,14 +59,16 @@ tasks.withType<Test> {
 }
 
 jooq {
+    val env = System.getenv()
     configurations {
         create("main") {  // name of the jOOQ configuration
             jooqConfiguration.apply {
                 jdbc.apply {
                     driver = "org.postgresql.Driver"
-                    url = "jdbc:postgresql://localhost:5432/mapuvic"
-                    user = "uvic"
-                    password = "uvic"
+                    url =
+                        "jdbc:postgresql://${env["DATABASE_SERVER_NAME"] ?: "localhost"}:${env["DATABASE_PORT"] ?: "5432"}/${env["DATABASE_NAME"] ?: "mapuvic"}"
+                    user = env["DATABASE_USERNAME"] ?: "uvic"
+                    password = env["DATABASE_PASSWORD"] ?: "uvic"
                 }
                 generator.apply {
                     database.apply {
@@ -83,4 +88,11 @@ jooq {
             }
         }
     }
+}
+
+tasks.withType<JooqGenerate> {
+    inputs.dir(rootDir.resolve("database"))
+    inputs.file(rootDir.resolve("db.Dockerfile"))
+    allInputsDeclared.set(true)
+    outputs.dir(outputDir)
 }
