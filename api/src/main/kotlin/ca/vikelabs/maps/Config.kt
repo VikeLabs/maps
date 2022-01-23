@@ -1,79 +1,61 @@
 package ca.vikelabs.maps
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import java.nio.file.Path
-import kotlin.io.path.Path
-import kotlin.io.path.exists
+import com.zaxxer.hikari.HikariConfig
+import com.zaxxer.hikari.HikariDataSource
 import mu.KotlinLogging
 import org.http4k.core.Filter
 import org.http4k.core.then
 import org.http4k.filter.CorsPolicy
 import org.http4k.filter.ServerFilters
+import javax.sql.DataSource
 
 private val logger = KotlinLogging.logger {}
 
 
 data class Config(
-    val port: Int = 8000,
-    val requestLogging: Boolean = true,
-    val responseLogging: Boolean = true,
-    val unsafeCors: Boolean = true,
-    val databaseUrl: String = "jdbc:postgresql://localhost:5432/mapuvic",
+    val serverPort: Int,
+    val dataSource: DataSource
 ) {
     companion object {
-        fun fromArgs(
-            args: Array<String>,
-            onFailure: (message: String) -> Config = FailureHandlers.warnAndDefault,
-        ): Config {
-            val configPath = args
-                .asSequence()
-                .windowed(2, partialWindows = false)
-                .map { it[0] to it[1] }
-                .find { (key, _) -> key == "--config" }
+        operator fun invoke() = fromEnvironment()
 
-            return if (configPath != null) {
-                fromPath(Path(configPath.second), onFailure)
-            } else {
-                onFailure("Failed to find \"--config\" followed by a path.")
-            }
-        }
+        private fun Map<String, String>.getOrLogAndDefault(key: String, default: String) =
+            this[key] ?: run { logger.warn { "No $key found in environment. Defaulting to $default" }; default }
 
-        fun fromPath(
-            path: Path,
-            onFailure: (message: String) -> Config = FailureHandlers.warnAndDefault,
-        ): Config {
-            return if (path.exists()) {
-                ObjectMapper().readValue(path.toFile(), Config::class.java)
-            } else {
-                onFailure("\"$path\" does not exist")
-            }
-        }
-    }
+        fun fromEnvironment(): Config {
+            val env = System.getenv()
+            val serverPort = env.getOrLogAndDefault("SERVER_PORT", "8000").toIntOrNull()
+                ?: throw Exception("SERVER_PORT must be an integer.")
 
-    object FailureHandlers {
-        val warnAndDefault = fun(message: String): Config {
-            logger.warn { "$message Using default config." }
-            return Config()
-        }
-        val throwWithMessage = fun(message: String): Nothing {
-            throw Exception("Initialization of config failed with: $message")
+            val hikariConfig = HikariConfig()
+                .apply {
+                    dataSourceClassName =
+                        env.getOrLogAndDefault("DATA_SOURCE_CLASS_NAME", "org.postgresql.ds.PGSimpleDataSource")
+                    username =
+                        env.getOrLogAndDefault("DATABASE_USERNAME", "uvic")
+                    password =
+                        env.getOrLogAndDefault("DATABASE_PASSWORD", "uvic")
+                    dataSourceProperties.apply {
+                        setProperty("databaseName", env.getOrLogAndDefault("DATABASE_NAME", "mapuvic"))
+                        setProperty("portNumber", env.getOrLogAndDefault("DATABASE_PORT", "5432"))
+                        setProperty("serverName", env.getOrLogAndDefault("DATABASE_SERVER_NAME", "localhost"))
+                    }
+                }
+
+            return Config(serverPort, HikariDataSource(hikariConfig))
         }
     }
 
     private val configuredLogger = Filter { next ->
         { req ->
-            if (requestLogging) {
-                logger.info { req.toMessage() }
-            }
+            logger.info { req.toMessage() }
             val response = next(req)
-            if (responseLogging) {
-                logger.info { req.toMessage() }
-            }
+            logger.info { req.toMessage() }
             response
         }
     }
 
-    private val cors = if (unsafeCors) ServerFilters.Cors(CorsPolicy.UnsafeGlobalPermissive) else Filter { it }
+    private val cors = ServerFilters.Cors(CorsPolicy.UnsafeGlobalPermissive)
 
     val filters = cors.then(configuredLogger)
 }

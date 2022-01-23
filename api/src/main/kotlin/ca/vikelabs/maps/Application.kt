@@ -15,15 +15,8 @@ import org.http4k.contract.openapi.v3.OpenApi3
 import org.http4k.core.HttpHandler
 import org.http4k.core.Uri
 
-private val logger = KotlinLogging.logger {}
-
-private val warnAndDefaultConfig by lazy {
-    logger.info { "No configuration given to application. Using default config" }
-    Config()
-}
-
 fun application(
-    config: Config = warnAndDefaultConfig
+    config: Config = Config()
 ): HttpHandler {
 
     return contract {
@@ -43,14 +36,14 @@ fun application(
             ),
             servers = listOf(
                 ApiServer(
-                    url = Uri.of("http://localhost:${config.port}"),
+                    url = Uri.of("http://localhost:${config.serverPort}"),
                     description = "The greatest server!"
                 )
             )
         )
         descriptionPath = "/"
         routes += Ping().contractRoute
-        routes += Search(DatabaseOpenStreetMapsMapData(config.database.dataSource)).contractRoute
+        routes += Search(DatabaseOpenStreetMapsMapData(config.dataSource)).contractRoute
         routes += Route().contractRoute
     }
 }
