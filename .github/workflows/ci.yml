@@ -23,7 +23,6 @@ jobs:
         name: build api
         run: gradle api:build
         env:
-          DATABASE_SERVER_NAME: postgres
           DATABASE_PORT: 5432
   build-frontend:
     runs-on: ubuntu-latest
