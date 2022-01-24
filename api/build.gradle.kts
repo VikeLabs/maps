@@ -67,7 +67,6 @@ fun Map<String, String>.getOrLogAndDefault(key: String, default: String) =
 
 jooq {
     val env = System.getenv()
-    println(env)
     version.set(Version.jooq)
     configurations {
         create("main") {  // name of the jOOQ configuration
