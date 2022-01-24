@@ -1,4 +1,5 @@
 import nu.studer.gradle.jooq.JooqGenerate
+import org.jooq.meta.jaxb.Logging
 
 plugins {
     kotlin("jvm") version "1.6.0"
@@ -62,6 +63,17 @@ tasks.withType<Test> {
     reports.junitXml.required.set(false)
 }
 
+tasks.withType<JooqGenerate> {
+    inputs.dir(rootDir.resolve("database"))
+    inputs.file(rootDir.resolve("db.Dockerfile"))
+    allInputsDeclared.set(true)
+    outputs.dir(outputDir)
+}
+
+tasks.withType<JavaCompile> {
+    version = "1.8"
+}
+
 fun Map<String, String>.getOrLogAndDefault(key: String, default: String) =
     this[key] ?: run { println("No $key found in environment. Defaulting to $default"); default }
 
@@ -71,6 +83,7 @@ jooq {
     configurations {
         create("main") {  // name of the jOOQ configuration
             jooqConfiguration.apply {
+                logging = Logging.WARN
                 jdbc.apply {
                     driver = "org.postgresql.Driver"
                     url =
@@ -108,11 +121,4 @@ jooq {
             }
         }
     }
-}
-
-tasks.withType<JooqGenerate> {
-    inputs.dir(rootDir.resolve("database"))
-    inputs.file(rootDir.resolve("db.Dockerfile"))
-    allInputsDeclared.set(true)
-    outputs.dir(outputDir)
 }
