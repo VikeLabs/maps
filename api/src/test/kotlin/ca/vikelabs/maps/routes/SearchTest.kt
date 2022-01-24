@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test
 
 class SearchTest : AbstractConfigTest() {
     val searchHandler = Search(MapData(config))
-    val application = application()
+    val application = application(config)
 
     @Test
     internal fun `check search exists`() {
