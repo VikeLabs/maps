@@ -39,7 +39,6 @@ fun application(
                 )
             )
         )
-        descriptionPath = "openapi.json"
         routes += Ping().contractRoute
         routes += Search(DatabaseOpenStreetMapsMapData(config.dataSource)).contractRoute
         routes += Route().contractRoute
