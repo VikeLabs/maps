@@ -1,4 +1,4 @@
-[![Build and Test](https://github.com/MarcusDunn/maps/actions/workflows/docker-test.yml/badge.svg)](https://github.com/MarcusDunn/maps/actions/workflows/docker-test.yml)
+[![CI](https://github.com/VikeLabs/maps/actions/workflows/ci.yml/badge.svg)](https://github.com/VikeLabs/maps/actions/workflows/ci.yml)
 
 # maps
 
