@@ -8,7 +8,7 @@ class DatabaseOpenStreetMapsMapDataTest : AbstractConfigTest() {
     @Test
     fun `check converts coordinates correctly`() {
         assertDoesNotThrow {
-            DatabaseOpenStreetMapsMapData(config.database.dataSource).buildings().joinToString("\n") { it.toString() }
+            DatabaseOpenStreetMapsMapData(config.dataSource).buildings().joinToString("\n") { it.toString() }
                 .also { println(it) }
         }
     }
