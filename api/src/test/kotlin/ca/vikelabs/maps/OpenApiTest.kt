@@ -1,5 +1,6 @@
 package ca.vikelabs.maps
 
+import ca.vikelabs.maps.util.AbstractConfigTest
 import ca.vikelabs.maps.util.OpenApiApprovalTest
 import com.natpryce.hamkrest.assertion.assertThat
 import org.http4k.core.Method
@@ -11,8 +12,8 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(OpenApiApprovalTest::class)
-class OpenApiTest {
-    val application = application()
+class OpenApiTest : AbstractConfigTest() {
+    val application = application(config)
 
     @Test
     fun `check approved`(approver: Approver) {

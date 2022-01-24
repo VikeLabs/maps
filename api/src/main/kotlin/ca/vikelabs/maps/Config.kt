@@ -7,6 +7,7 @@ import org.http4k.core.Filter
 import org.http4k.core.then
 import org.http4k.filter.CorsPolicy
 import org.http4k.filter.ServerFilters
+import java.util.concurrent.atomic.AtomicBoolean
 import javax.sql.DataSource
 
 private val logger = KotlinLogging.logger {}
@@ -16,7 +17,15 @@ data class Config(
     val serverPort: Int,
     val dataSource: DataSource
 ) {
+    init {
+        if (isInitialized.getAndSet(true)) {
+            throw Exception("Already initialized a Config.")
+        }
+    }
+
     companion object {
+        private val isInitialized = AtomicBoolean()
+
         operator fun invoke() = fromEnvironment()
 
         private fun Map<String, String>.getOrLogAndDefault(key: String, default: String) =

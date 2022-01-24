@@ -72,6 +72,7 @@ tasks.withType<JooqGenerate> {
 
 tasks.withType<JavaCompile> {
     targetCompatibility = "1.8"
+    sourceCompatibility = "1.8"
 }
 
 fun Map<String, String>.getOrLogAndDefault(key: String, default: String) =
