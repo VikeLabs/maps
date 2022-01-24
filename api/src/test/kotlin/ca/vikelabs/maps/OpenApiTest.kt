@@ -3,7 +3,7 @@ package ca.vikelabs.maps
 import ca.vikelabs.maps.util.AbstractConfigTest
 import ca.vikelabs.maps.util.OpenApiApprovalTest
 import com.natpryce.hamkrest.assertion.assertThat
-import org.http4k.core.Method
+import org.http4k.core.Method.GET
 import org.http4k.core.Request
 import org.http4k.core.Status
 import org.http4k.hamkrest.hasStatus
@@ -17,16 +17,16 @@ class OpenApiTest : AbstractConfigTest() {
 
     @Test
     fun `check approved`(approver: Approver) {
-        approver.assertApproved(application(Request(Method.GET, "/")))
+        approver.assertApproved(application(Request(GET, "/openapi.json")))
     }
 
     @Test
     fun `check openapi content type`() {
-        assertThat(application(Request(Method.GET, "/")), hasStatus(Status.OK))
+        assertThat(application(Request(GET, "/openapi.json")), hasStatus(Status.OK))
     }
 
     @Test
     fun `check openapi status`() {
-        assertThat(application(Request(Method.GET, "/")), hasStatus(Status.OK))
+        assertThat(application(Request(GET, "/openapi.json")), hasStatus(Status.OK))
     }
 }
