@@ -8,7 +8,7 @@ interface MapData {
     fun buildings(): List<Building>
 
     companion object {
-        operator fun invoke(config: Config = Config()): MapData =
+        operator fun invoke(config: Config): MapData =
             DatabaseOpenStreetMapsMapData(config.dataSource)
     }
 }

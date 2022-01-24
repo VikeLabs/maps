@@ -5,6 +5,7 @@ import ca.vikelabs.maps.routes.Route.Companion.fromLatQuery
 import ca.vikelabs.maps.routes.Route.Companion.fromLonQuery
 import ca.vikelabs.maps.routes.Route.Companion.toLatQuery
 import ca.vikelabs.maps.routes.Route.Companion.toLonQuery
+import ca.vikelabs.maps.util.AbstractConfigTest
 import com.natpryce.hamkrest.assertion.assertThat
 import org.http4k.core.Method
 import org.http4k.core.Request
@@ -14,10 +15,10 @@ import org.http4k.core.with
 import org.http4k.hamkrest.hasStatus
 import org.junit.jupiter.api.Test
 
-class RoutingTest {
+class RoutingTest : AbstractConfigTest() {
     @Test
     fun `check route exists`() {
-        assertThat(application()(Request(Method.GET, "/route")), hasStatus(NOT_FOUND).not())
+        assertThat(application(config)(Request(Method.GET, "/route")), hasStatus(NOT_FOUND).not())
     }
 
     @Test

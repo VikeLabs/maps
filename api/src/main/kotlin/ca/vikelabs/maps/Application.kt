@@ -4,7 +4,6 @@ import ca.vikelabs.maps.data.impl.DatabaseOpenStreetMapsMapData
 import ca.vikelabs.maps.routes.Ping
 import ca.vikelabs.maps.routes.Route
 import ca.vikelabs.maps.routes.Search
-import mu.KotlinLogging
 import org.http4k.contract.contract
 import org.http4k.contract.openapi.ApiInfo
 import org.http4k.contract.openapi.ApiRenderer
@@ -16,9 +15,8 @@ import org.http4k.core.HttpHandler
 import org.http4k.core.Uri
 
 fun application(
-    config: Config = Config()
+    config: Config
 ): HttpHandler {
-
     return contract {
         renderer = OpenApi3(
             apiInfo = ApiInfo(
@@ -41,7 +39,7 @@ fun application(
                 )
             )
         )
-        descriptionPath = "/"
+        descriptionPath = "openapi.json"
         routes += Ping().contractRoute
         routes += Search(DatabaseOpenStreetMapsMapData(config.dataSource)).contractRoute
         routes += Route().contractRoute

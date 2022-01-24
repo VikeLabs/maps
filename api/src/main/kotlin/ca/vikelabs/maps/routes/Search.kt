@@ -16,7 +16,7 @@ import org.http4k.lens.Query
 import org.http4k.lens.nonEmptyString
 import ca.vikelabs.maps.data.Building as MapsDataBuilding
 
-class Search(private val mapData: MapData = MapData()) : HttpHandler {
+class Search(private val mapData: MapData) : HttpHandler {
     data class ResponseBody(val results: List<Building>) {
         data class Building(val name: String, val center: Coordinate) {
             constructor(building: MapsDataBuilding) : this(
