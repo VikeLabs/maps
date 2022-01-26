@@ -1,3 +1,0 @@
-GET https://lz4.overpass-api.de/api/interpreter?data=%5Bout%3Ajson%5D%3B%0A++++%0Aarea%5Bname%3D%22University+of+Victoria%22%5D-%3E.uvic%3B%0A%0A%28%0Away%28area.uvic%29%5Bbuilding%5D%3B%0Arel%28area.uvic%29%5Bbuilding%5D%3B%0A%29%3B%0A%0A%0A%28%0A++._%3B%0A++%3E%3B%0A%29%3B%0A%0Aout%3B HTTP/1.1
-
-

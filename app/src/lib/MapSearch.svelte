@@ -12,8 +12,11 @@
     if (text.length > 2) {
         dispatch(Events.Search, {text})
     }
+}} on:dblclick={(event) => {
+    event.stopPropagation();
 }}>
-
+  
+  
 <style>
     input{
         margin-left: 2rem;
@@ -31,3 +34,4 @@
     }
 
 </style>
+
