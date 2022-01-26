@@ -16,7 +16,7 @@ docker run -p "5432:5432" quality11/mapuvic-database:0.0.3
 
 Should run it. Run `docker ps` and there should be a single container running.
 
-### Running
+### Running the backend
 
 Running the backend itself is done through gradle.
 
@@ -25,10 +25,10 @@ Running the backend itself is done through gradle.
 ```
 Will start a server. When you see `server started at localhost:8000`, it is ready for connections.
 
-### Testing 
+### Developing on the frontend
 
-Testing the backend is done through gradle.
-
+The frontend is best devloped with
 ```
-./gradlew api:test
+./gradlew app:dev
 ```
+This should enable hot reloading and other nice features.
