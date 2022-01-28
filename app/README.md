@@ -1,44 +1,37 @@
-# App
+# api
 
-This is the frontend of the mapuvic project.
+This is the frontend for the app. It is everything the user sees and iteracts with.
 
-# Contributing
+## Contributing
 
-In order to get fully up and running you need the backend running. The simplest way to do this is via docker
+The frontend is not much but good looks without the backend, you'll need that running first.
 
-## Running the backend via Docker
+In order to build the backend one needs the database running.
 
-Make sure all the following commands are run in the root of the project.
+### Running the database via Docker
 
-1. build the database docker image.
-
-```shell
-docker build -t mapuvic-db -f db.Dockerfile .
-```
-
-2. run the database docker image. This needs to be running in order to build the backend itself.
+A already built image is hosted on dockerhub.
 
 ```shell
-docker run -p "5432:5432" mapuvic-db
+docker run -p "5432:5432" quality11/mapuvic-database:0.0.3
 ```
 
-3. Build the backend image
+Should run it. Run `docker ps` and there should be a single container running.
 
-```shell
-docker build -t mapuvic-backend --network=host -f api.Dockerfile .
+### Running the backend
+
+Running the backend itself is done through gradle.
+
+```
+./gradlew api:run
 ```
 
-4. Run the backend.
+Will start a server. When you see `server started at localhost:8000`, it is ready for connections.
 
-```shell
-docker run -p "8000:8000" --network=host mapuvic-backend
+### Developing on the frontend
+
+The frontend is best devloped with
 ```
-
-## Starting the frontend.
-
-Run the frontend, this installs node, npm, and all the dependencies, then starts a development server, saving files
-should reload the app.
-
-```shell
-./gradlew app:dev 
+./gradlew app:dev
 ```
+This should enable hot reloading and other nice features.
