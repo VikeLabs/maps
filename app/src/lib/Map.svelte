@@ -11,9 +11,6 @@
     let searchbar = new L.Control({position: 'topleft'})
     let mapSearch: MapSearch
     let icons: Marker[] = []
-    let longBorder = [48.470,48.457];
-    let latBorder = [-123.323,-123.302];
-    //let userCords = [];
 
     searchbar.onAdd = (map: L.Map): HTMLElement => {
         const div = L.DomUtil.create('div');
@@ -54,32 +51,25 @@
     }
 
     const getUserLocation = () => {
-        setTimeout(() => {
-            const mapOptions = {
+        setInterval(() => {
+            navigator.geolocation.getCurrentPosition((pos) => {
+                icons.push(L.marker([pos.coords.latitude, pos.coords.longitude])
+                    .addTo(map));
+            },
+            (err) => {
+                console.warn(`ERROR(${err.code}): ${err.message}`);
+            },
+            {
                 enableHighAccuracy: true,
                 timeout: 5000,
                 maximumAge: 0
-            };
-
-            function success(pos) {
-                let crd = pos.coords;
-                console.log("crd:",crd.longitude, crd.latitude);
-                //userCords.push(crd.longitude, crd.latitude);
-                //console.log("userCords:",userCords);
-            }
-
-            function error(err) {
-                console.warn(`ERROR(${err.code}): ${err.message}`);
-            }
-            navigator.geolocation.getCurrentPosition(success, error, mapOptions);
-        });
-
+            });
+        }, 2000);
     }
 
     const mapAction = (container: HTMLElement) => {
         map = L.map(container, {zoomControl: false, attributionControl: false}).setView([48.463069, -123.311833], 16);
         getUserLocation();
-        //map = L.map(container, {zoomControl: false, attributionControl: false}).setView(userCords, 16);
 
         L.tileLayer(
             'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
