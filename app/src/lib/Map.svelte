@@ -50,7 +50,7 @@
         return div
     }
 
-    const getUserLocation = () => {
+    const initializeUserTracking = () => {
         setInterval(() => {
             navigator.geolocation.getCurrentPosition((pos) => {
                 icons.push(L.marker([pos.coords.latitude, pos.coords.longitude])
@@ -69,7 +69,7 @@
 
     const mapAction = (container: HTMLElement) => {
         map = L.map(container, {zoomControl: false, attributionControl: false}).setView([48.463069, -123.311833], 16);
-        getUserLocation();
+        initializeUserTracking();
 
         L.tileLayer(
             'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
