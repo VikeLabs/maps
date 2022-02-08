@@ -11,7 +11,7 @@
     let searchbar = new L.Control({position: 'topleft'})
     let mapSearch: MapSearch
     let icons: Marker[] = []
-
+    
     searchbar.onAdd = (map: L.Map): HTMLElement => {
         const div = L.DomUtil.create('div');
         let searchResponsePromise: CancelablePromise<SearchResponseBody>
@@ -51,7 +51,7 @@
     }
 
     const initializeUserTracking = () => {
-        setInterval(() => {
+        let userLocation = setInterval(() => {
             navigator.geolocation.getCurrentPosition((pos) => {
                 icons.push(L.marker([pos.coords.latitude, pos.coords.longitude])
                     .addTo(map));
@@ -65,6 +65,11 @@
                 maximumAge: 0
             });
         }, 2000);
+        
+        return {
+            destroy: () =>
+                clearInterval(userLocation)
+        }
     }
 
     const mapAction = (container: HTMLElement) => {
