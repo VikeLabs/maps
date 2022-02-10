@@ -74,7 +74,7 @@
                 [uvic[0] + 0.02, uvic[1] - 0.02],
                 [uvic[0] - 0.02, uvic[1] + 0.02]
             ],
-            minZoom: 16,
+            minZoom: 15,
             maxBoundsViscosity: 0.1
         }).setView(uvic, 16);
         const stopTrackingUser = initializeUserTracking();
@@ -83,7 +83,6 @@
             'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
             {
                 attribution: config.attribution,
-                subdomains: 'abcd'
             }
             // maxBounds and maxBoundsViscosity are not documented in the type definitions
             // despite being in the documentation. See https://leafletjs.com/reference.html#latlngbounds
