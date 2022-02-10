@@ -66,15 +66,12 @@
             });
         }, 2000);
         
-        return {
-            destroy: () =>
-                clearInterval(userLocation)
-        }
+        return () => clearInterval(userLocation)
     }
 
     const mapAction = (container: HTMLElement) => {
         map = L.map(container, {zoomControl: false, attributionControl: false}).setView([48.463069, -123.311833], 16);
-        initializeUserTracking();
+        const stopTrackingUser = initializeUserTracking();
 
         L.tileLayer(
             'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
@@ -89,6 +86,7 @@
         return {
             destroy: () => {
                 map.remove()
+                stopTrackingUser()
             },
         };
     }
