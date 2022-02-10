@@ -2,7 +2,6 @@ package ca.vikelabs.maps
 
 import ca.vikelabs.maps.data.impl.DatabaseOpenStreetMapsMapData
 import ca.vikelabs.maps.routes.Ping
-import ca.vikelabs.maps.routes.Route
 import ca.vikelabs.maps.routes.Search
 import org.http4k.contract.contract
 import org.http4k.contract.openapi.ApiInfo
@@ -38,7 +37,6 @@ fun application(config: Config) = contract {
     descriptionPath = "/openapi.json"
     routes += Ping().contractRoute
     routes += Search(DatabaseOpenStreetMapsMapData(config.dataSource)).contractRoute
-    routes += Route().contractRoute
 }
 
 

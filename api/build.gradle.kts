@@ -67,7 +67,6 @@ tasks.withType<JooqGenerate> {
     inputs.dir(rootDir.resolve("database"))
     inputs.file(rootDir.resolve("db.Dockerfile"))
     allInputsDeclared.set(true)
-    outputs.dir(outputDir)
 }
 
 tasks.withType<JavaCompile> {
