@@ -75,7 +75,7 @@
                 [uvic[0] - 0.02, uvic[1] + 0.02]
             ],
             minZoom: 15,
-            maxBoundsViscosity: 0.1
+            maxBoundsViscosity: 0.5
         }).setView(uvic, 16);
         const stopTrackingUser = initializeUserTracking();
 
