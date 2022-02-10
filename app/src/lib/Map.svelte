@@ -75,8 +75,8 @@
             zoomControl: false,
             attributionControl: false,
             maxBounds: [
-                [48.463069 + 0.02, -123.311833 - 0.02],
-                [48.463069 - 0.02, -123.311833 + 0.02]
+                [uvic[0] + 0.02, uvic[1] - 0.02],
+                [uvic[0] - 0.02, uvic[1] + 0.02]
             ],
             minZoom: 16,
             maxBoundsViscosity: 0.1
