@@ -1,6 +1,6 @@
 <script lang="ts">
-    import * as L from 'leaflet'
     import type {Marker} from 'leaflet'
+    import * as L from 'leaflet'
     import MapSearch from "./MapSearch.svelte";
     import type {CancelablePromise, SearchResponseBody} from "../../api";
     import {Service} from "../../api";
@@ -11,7 +11,7 @@
     let searchbar = new L.Control({position: 'topleft'})
     let mapSearch: MapSearch
     let icons: Marker[] = []
-    
+
     searchbar.onAdd = (map: L.Map): HTMLElement => {
         const div = L.DomUtil.create('div');
         let searchResponsePromise: CancelablePromise<SearchResponseBody>
@@ -53,33 +53,44 @@
     const initializeUserTracking = () => {
         let userLocation = setInterval(() => {
             navigator.geolocation.getCurrentPosition((pos) => {
-                icons.push(L.marker([pos.coords.latitude, pos.coords.longitude])
-                    .addTo(map));
-            },
-            (err) => {
-                console.warn(`ERROR(${err.code}): ${err.message}`);
-            },
-            {
-                enableHighAccuracy: true,
-                timeout: 5000,
-                maximumAge: 0
-            });
+                    icons.push(L.marker([pos.coords.latitude, pos.coords.longitude])
+                        .addTo(map));
+                },
+                (err) => {
+                    console.warn(`ERROR(${err.code}): ${err.message}`);
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 5000,
+                    maximumAge: 0
+                });
         }, 2000);
-        
+
         return () => clearInterval(userLocation)
     }
 
     const mapAction = (container: HTMLElement) => {
-        map = L.map(container, {zoomControl: false, attributionControl: false}).setView([48.463069, -123.311833], 16);
+        const uvic = [48.463069, -123.311833];
+        map = L.map(container, {
+            zoomControl: false,
+            attributionControl: false,
+            maxBounds: [
+                [48.463069 + 0.02, -123.311833 - 0.02],
+                [48.463069 - 0.02, -123.311833 + 0.02]
+            ],
+            minZoom: 16,
+            maxBoundsViscosity: 0.1
+        }).setView(uvic, 16);
         const stopTrackingUser = initializeUserTracking();
 
         L.tileLayer(
             'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
             {
                 attribution: config.attribution,
-                subdomains: 'abcd',
-                maxZoom: 20,
+                subdomains: 'abcd'
             }
+            // maxBounds and maxBoundsViscosity are not documented in the type definitions
+            // despite being in the documentation. See https://leafletjs.com/reference.html#latlngbounds
         ).addTo(map);
         searchbar.addTo(map)
 
