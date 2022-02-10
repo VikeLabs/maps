@@ -43,58 +43,6 @@
                 "deprecated": false
             }
         },
-        "/route": {
-            "get": {
-                "summary": "Route between two places.",
-                "tags": [
-                    ""
-                ],
-                "parameters": [
-                    {
-                        "schema": {
-                            "type": "number"
-                        },
-                        "in": "query",
-                        "name": "toLat",
-                        "required": true,
-                        "description": "The goal latitude."
-                    },
-                    {
-                        "schema": {
-                            "type": "number"
-                        },
-                        "in": "query",
-                        "name": "toLon",
-                        "required": true,
-                        "description": "The goal longitude."
-                    },
-                    {
-                        "schema": {
-                            "type": "number"
-                        },
-                        "in": "query",
-                        "name": "fromLat",
-                        "required": true,
-                        "description": "The initial latitude."
-                    },
-                    {
-                        "schema": {
-                            "type": "number"
-                        },
-                        "in": "query",
-                        "name": "fromLon",
-                        "required": true,
-                        "description": "The initial longitude."
-                    }
-                ],
-                "responses": {
-                },
-                "security": [
-                ],
-                "operationId": "getRoute",
-                "deprecated": false
-            }
-        },
         "/search": {
             "get": {
                 "summary": "searches the UVic campus based on a single search string",
