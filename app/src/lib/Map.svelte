@@ -22,7 +22,9 @@
 
         mapSearch.$on("search", async ({detail}) => {
             const searchingToastId = toast.push("Searching", {duration: 10000})
-            icons.forEach(icon => icon.removeFrom(map))
+            while (icons.length > 0) {
+                icons.pop().removeFrom(map)
+            }
             if (searchResponsePromise) { // cancel old requests
                 searchResponsePromise.cancel()
             }
