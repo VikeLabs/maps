@@ -3,6 +3,7 @@
 /* eslint-disable */
 import type { PingResponseBody } from '../models/PingResponseBody';
 import type { SearchResponseBody } from '../models/SearchResponseBody';
+import type { SuggestResponseBody } from '../models/SuggestResponseBody';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { request as __request } from '../core/request';
 
@@ -36,6 +37,30 @@ export class Service {
             path: `/search`,
             query: {
                 'query': query,
+            },
+        });
+    }
+
+    /**
+     * lists possible completions for a given string
+     * Similar to search but doesn't use levenshteinDistance, instead just scanning the start of buildings
+     * and their abbreviations, it is however ordered by levenshteinDistance, capitalization are ignored
+     * for suggestions but included for sorting.
+     * @param query The query string the user has started typing
+     * @param max The max number of results returned.
+     * @returns SuggestResponseBody a list of suggested search terms
+     * @throws ApiError
+     */
+    public static getSuggest(
+        query: string,
+        max?: number,
+    ): CancelablePromise<SuggestResponseBody> {
+        return __request({
+            method: 'GET',
+            path: `/suggest`,
+            query: {
+                'query': query,
+                'max': max,
             },
         });
     }

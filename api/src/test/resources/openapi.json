@@ -88,6 +88,57 @@
                 "operationId": "getSearch",
                 "deprecated": false
             }
+        },
+        "/suggest": {
+            "get": {
+                "summary": "lists possible completions for a given string",
+                "description": "Similar to search but doesn't use levenshteinDistance, instead just scanning the start of buildings \nand their abbreviations, it is however ordered by levenshteinDistance, capitalization are ignored \nfor suggestions but included for sorting.",
+                "tags": [
+                    ""
+                ],
+                "parameters": [
+                    {
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query",
+                        "name": "query",
+                        "required": true,
+                        "description": "The query string the user has started typing"
+                    },
+                    {
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "in": "query",
+                        "name": "max",
+                        "required": false,
+                        "description": "The max number of results returned."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "a list of suggested search terms",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "suggestions": [
+                                        "ECS",
+                                        "Elliot Building"
+                                    ]
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuggestResponseBody"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                ],
+                "operationId": "getSuggest",
+                "deprecated": false
+            }
         }
     },
     "components": {
@@ -183,6 +234,30 @@
                 "required": [
                     "latitude",
                     "longitude"
+                ]
+            },
+            "SuggestResponseBody": {
+                "properties": {
+                    "suggestions": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "example": [
+                            "ECS",
+                            "Elliot Building"
+                        ],
+                        "type": "array"
+                    }
+                },
+                "example": {
+                    "suggestions": [
+                        "ECS",
+                        "Elliot Building"
+                    ]
+                },
+                "type": "object",
+                "required": [
+                    "suggestions"
                 ]
             }
         },
