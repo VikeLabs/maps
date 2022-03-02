@@ -23,7 +23,7 @@ class Suggest(private val mapData: MapData) : HttpHandler {
         val max = Query.int().defaulted("max", 10, "The max number of results returned.")
         val response = Body.auto<ResponseBody>().toLens()
 
-        val spec = "search" meta {
+        val spec = "suggest" meta {
             summary = "lists possible completions for a given string"
             description =
                 """Similar to search but doesn't use levenshteinDistance, instead just scanning the start of buildings 

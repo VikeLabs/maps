@@ -9,5 +9,6 @@ export type { Coordinate } from './models/Coordinate';
 export type { PingResponseBody } from './models/PingResponseBody';
 export type { SearchResponseBody } from './models/SearchResponseBody';
 export type { SearchResponseBodyBuilding } from './models/SearchResponseBodyBuilding';
+export type { SuggestResponseBody } from './models/SuggestResponseBody';
 
 export { Service } from './services/Service';
