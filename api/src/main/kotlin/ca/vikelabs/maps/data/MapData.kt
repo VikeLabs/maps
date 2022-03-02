@@ -14,5 +14,10 @@ interface MapData {
 }
 
 data class Building(val name: String, val abbrName: String?, val bounds: List<Coordinate>) {
-    val center by lazy { bounds.reduce { acc, coordinates -> acc + coordinates } / bounds.size }
+    val center by lazy { bounds.mean() }
 }
+
+private fun List<Coordinate>.mean() = mean(Coordinate::plus, Coordinate::div)
+
+private fun <T> List<T>.mean(add: (T, T) -> T, div: (T, Int) -> T) = div(reduce(add), size)
+
