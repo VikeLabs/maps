@@ -49,6 +49,9 @@ dependencies {
     testImplementation(group = "org.http4k", name = "http4k-testing-approval")
     testImplementation(group = "org.http4k", name = "http4k-testing-hamkrest")
 
+    // mocking
+    testImplementation("io.mockk:mockk:1.12.3")
+
     // jsonPath
     testImplementation(group = "com.jayway.jsonpath", name = "json-path", version = "2.6.0")
 }
