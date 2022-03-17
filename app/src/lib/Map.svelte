@@ -57,7 +57,7 @@
                     .addTo(map));
             },
             (err) => {
-                console.warn(`ERROR(${err.code}): ${err.message}`);
+                clearInterval(userLocation);
             },
             {
                 enableHighAccuracy: true,
