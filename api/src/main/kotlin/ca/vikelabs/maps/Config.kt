@@ -14,7 +14,8 @@ private val logger = KotlinLogging.logger {}
 
 data class Config(
     val serverPort: Int,
-    val dataSource: DataSource
+    val dataSource: DataSource,
+    val openDirectionsApiKey: String,
 ) {
     init {
         System.setProperty("org.jooq.no-logo", "true")
@@ -35,9 +36,12 @@ data class Config(
             val env = System.getenv()
             val serverPort = env.getOrLogAndDefault("SERVER_PORT", "8000").toIntOrNull()
                 ?: throw Exception("SERVER_PORT must be an integer.")
+            val openDirectionsApiKey =
+                env.getOrLogAndDefault("OPEN_DIRECTIONS_API_KEY", "uUwGVDaDn1E7ntjbdgKxLF8blmHRbLdp")
 
             val hikariConfig = HikariConfig().apply {
-                dataSourceClassName = env.getOrLogAndDefault("DATA_SOURCE_CLASS_NAME", "org.postgresql.ds.PGSimpleDataSource")
+                dataSourceClassName =
+                    env.getOrLogAndDefault("DATA_SOURCE_CLASS_NAME", "org.postgresql.ds.PGSimpleDataSource")
                 username = env.getOrLogAndDefault("DATABASE_USERNAME", "uvic")
                 password = env.getOrLogAndDefault("DATABASE_PASSWORD", "uvic")
                 dataSourceProperties.apply {
@@ -47,7 +51,7 @@ data class Config(
                 }
             }
 
-            return Config(serverPort, HikariDataSource(hikariConfig))
+            return Config(serverPort, HikariDataSource(hikariConfig), openDirectionsApiKey)
         }
     }
 

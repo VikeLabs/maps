@@ -4,6 +4,7 @@ import ca.vikelabs.maps.routes.Route.Companion.fromLatQuery
 import ca.vikelabs.maps.routes.Route.Companion.fromLngQuery
 import ca.vikelabs.maps.routes.Route.Companion.toLatQuery
 import ca.vikelabs.maps.routes.Route.Companion.toLngQuery
+import ca.vikelabs.maps.routing.OpenDirectionsRouter
 import ca.vikelabs.maps.routing.Router
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
@@ -14,8 +15,12 @@ import org.http4k.core.Status.Companion.OK
 import org.http4k.core.with
 import org.http4k.hamkrest.hasBody
 import org.http4k.hamkrest.hasStatus
+import org.http4k.testing.Approver
+import org.http4k.testing.JsonApprovalTest
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 
+@ExtendWith(JsonApprovalTest::class)
 internal class RouteTest {
     @Test
     internal fun `check gives 400 when missing query args`() {
@@ -78,5 +83,18 @@ internal class RouteTest {
         val response = route(request)
 
         assertThat(response, hasBody(Route.ResponseBody.lens, equalTo(Route.ResponseBody(coordinates))))
+    }
+
+    @Test
+    internal fun `check route is approved`(approver: Approver) {
+        val route = Route(OpenDirectionsRouter("uUwGVDaDn1E7ntjbdgKxLF8blmHRbLdp"))
+        val request = Route.spec.newRequest().with(
+            fromLatQuery of 48.46382911391982,
+            fromLngQuery of -123.30963467575295,
+            toLatQuery of 48.46517427947644,
+            toLngQuery of -123.31545907142461,
+        )
+        val response = route(request)
+        approver.assertApproved(response)
     }
 }
