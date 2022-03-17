@@ -43,6 +43,77 @@
                 "deprecated": false
             }
         },
+        "/route": {
+            "get": {
+                "summary": "Gives a path from `from` to `to`",
+                "description": "Determines a reasonable but unoptimized route between two points",
+                "tags": [
+                    ""
+                ],
+                "parameters": [
+                    {
+                        "schema": {
+                            "type": "number"
+                        },
+                        "in": "query",
+                        "name": "fromLatitude",
+                        "required": true
+                    },
+                    {
+                        "schema": {
+                            "type": "number"
+                        },
+                        "in": "query",
+                        "name": "fromLongitude",
+                        "required": true
+                    },
+                    {
+                        "schema": {
+                            "type": "number"
+                        },
+                        "in": "query",
+                        "name": "toLatitude",
+                        "required": true
+                    },
+                    {
+                        "schema": {
+                            "type": "number"
+                        },
+                        "in": "query",
+                        "name": "toLongitude",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "points": [
+                                        {
+                                            "latitude": 1,
+                                            "longitude": 2
+                                        },
+                                        {
+                                            "latitude": 2,
+                                            "longitude": 2
+                                        }
+                                    ]
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/RouteResponseBody"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                ],
+                "operationId": "getRoute",
+                "deprecated": false
+            }
+        },
         "/search": {
             "get": {
                 "summary": "searches the UVic campus based on a single search string",
@@ -218,17 +289,17 @@
             "Coordinate": {
                 "properties": {
                     "latitude": {
-                        "example": 48.4627526,
+                        "example": 1,
                         "type": "number"
                     },
                     "longitude": {
-                        "example": -123.3108017,
+                        "example": 2,
                         "type": "number"
                     }
                 },
                 "example": {
-                    "latitude": 48.4627526,
-                    "longitude": -123.3108017
+                    "latitude": 1,
+                    "longitude": 2
                 },
                 "type": "object",
                 "required": [
@@ -258,6 +329,42 @@
                 "type": "object",
                 "required": [
                     "suggestions"
+                ]
+            },
+            "RouteResponseBody": {
+                "properties": {
+                    "points": {
+                        "items": {
+                            "$ref": "#/components/schemas/Coordinate"
+                        },
+                        "example": [
+                            {
+                                "latitude": 1,
+                                "longitude": 2
+                            },
+                            {
+                                "latitude": 2,
+                                "longitude": 2
+                            }
+                        ],
+                        "type": "array"
+                    }
+                },
+                "example": {
+                    "points": [
+                        {
+                            "latitude": 1,
+                            "longitude": 2
+                        },
+                        {
+                            "latitude": 2,
+                            "longitude": 2
+                        }
+                    ]
+                },
+                "type": "object",
+                "required": [
+                    "points"
                 ]
             }
         },

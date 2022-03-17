@@ -2,8 +2,10 @@ package ca.vikelabs.maps
 
 import ca.vikelabs.maps.data.impl.DatabaseOpenStreetMapsMapData
 import ca.vikelabs.maps.routes.Ping
+import ca.vikelabs.maps.routes.Route
 import ca.vikelabs.maps.routes.Search
 import ca.vikelabs.maps.routes.Suggest
+import ca.vikelabs.maps.routing.Router
 import org.http4k.contract.ContractRoutingHttpHandler
 import org.http4k.contract.contract
 import org.http4k.contract.openapi.ApiInfo
@@ -16,6 +18,7 @@ import org.http4k.core.Uri
 
 fun application(config: Config): ContractRoutingHttpHandler {
     val mapData = DatabaseOpenStreetMapsMapData(config.dataSource)
+    val router = Router { TODO() }
     return contract {
         renderer = OpenApi3(
             apiInfo = ApiInfo(
@@ -42,6 +45,7 @@ fun application(config: Config): ContractRoutingHttpHandler {
         routes += Ping().contractRoute
         routes += Search(mapData).contractRoute
         routes += Suggest(mapData).contractRoute
+        routes += Route(router).contractRoute
     }
 }
 
