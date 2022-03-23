@@ -1,5 +1,9 @@
+import nu.studer.gradle.jooq.JooqGenerate
+import org.jooq.meta.jaxb.Logging
+
 plugins {
     kotlin("jvm") version "1.6.0"
+    id("nu.studer.jooq") version "6.0.1"
     application
 }
 
@@ -13,6 +17,10 @@ application {
 
 repositories {
     mavenCentral()
+}
+
+object Version {
+    const val jooq = "3.16.2"
 }
 
 dependencies {
@@ -31,6 +39,12 @@ dependencies {
     // testing
     testImplementation(group = "org.jetbrains.kotlin", name = "kotlin-test-junit5")
 
+    // database
+    implementation(group = "org.jooq", name = "jooq", version = Version.jooq)
+    implementation("org.postgresql:postgresql:42.2.14")
+    jooqGenerator("org.postgresql:postgresql:42.2.14")
+    implementation("com.zaxxer:HikariCP:5.0.1")
+
     // http4k testing
     testImplementation(group = "org.http4k", name = "http4k-testing-approval")
     testImplementation(group = "org.http4k", name = "http4k-testing-hamkrest")
@@ -47,4 +61,55 @@ tasks.withType<Test> {
     }
     reports.html.required.set(false)
     reports.junitXml.required.set(false)
+}
+
+tasks.withType<JooqGenerate> {
+    inputs.dir(rootDir.resolve("database"))
+    inputs.file(rootDir.resolve("db.Dockerfile"))
+    allInputsDeclared.set(true)
+}
+
+tasks.withType<JavaCompile> {
+    targetCompatibility = "1.8"
+    sourceCompatibility = "1.8"
+}
+
+jooq {
+    val env = System.getenv()
+    version.set(Version.jooq)
+    configurations {
+        create("main") {  // name of the jOOQ configuration
+            jooqConfiguration.apply {
+                logging = Logging.WARN
+                jdbc.apply {
+                    driver = "org.postgresql.Driver"
+                    url =
+                        "jdbc:postgresql://${
+                            env.getOrDefault("DATABASE_SERVER_NAME", "localhost")
+                        }:${
+                            env.getOrDefault("DATABASE_PORT", "5432")
+                        }/${
+                            env.getOrDefault("DATABASE_NAME", "mapuvic")
+                        }"
+                    user = env.getOrDefault("DATABASE_USERNAME", "uvic")
+                    password = env.getOrDefault("DATABASE_PASSWORD", "uvic")
+                }
+                generator.apply {
+                    database.apply {
+                        name = "org.jooq.meta.postgres.PostgresDatabase"
+                        inputSchema = "public"
+                    }
+                    generate.apply {
+                        isRecords = true
+                        isImmutablePojos = true
+                        isFluentSetters = true
+                    }
+                    target.apply {
+                        packageName = "ca.vikelabs.maps.domain"
+                    }
+                    strategy.name = "org.jooq.codegen.DefaultGeneratorStrategy"
+                }
+            }
+        }
+    }
 }

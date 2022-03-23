@@ -1,15 +1,15 @@
 package ca.vikelabs.maps.routes
 
 import ca.vikelabs.maps.application
-import ca.vikelabs.maps.data.impl.OpenStreetMapsOverpassMapData
-import ca.vikelabs.maps.util.CachedNetworkTest
+import ca.vikelabs.maps.data.MapData
+import ca.vikelabs.maps.util.AbstractConfigTest
+import com.natpryce.hamkrest.Matcher
 import com.natpryce.hamkrest.anyElement
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import com.natpryce.hamkrest.greaterThanOrEqualTo
 import com.natpryce.hamkrest.has
 import com.natpryce.hamkrest.hasSize
-import org.http4k.client.JavaHttpClient
 import org.http4k.core.ContentType
 import org.http4k.core.Method
 import org.http4k.core.Request
@@ -20,9 +20,9 @@ import org.http4k.hamkrest.hasContentType
 import org.http4k.hamkrest.hasStatus
 import org.junit.jupiter.api.Test
 
-class SearchTest : CachedNetworkTest(JavaHttpClient()) {
-    val searchHandler = search(OpenStreetMapsOverpassMapData(client = cachedClient))
-    val application = application()
+class SearchTest : AbstractConfigTest() {
+    val searchHandler = Search(MapData(config))
+    val application = application(config)
 
     @Test
     internal fun `check search exists`() {
@@ -109,6 +109,22 @@ class SearchTest : CachedNetworkTest(JavaHttpClient()) {
             hasBody(
                 Search.response,
                 has("results", { it.results }, anyElement(has("name", { it.name }, equalTo("Elliott Building"))))
+            )
+        )
+    }
+
+    @Test
+    fun `check returns reasonable centers`() {
+        assertThat(
+            searchHandler(Request(Method.GET, "/search?query=elliott")),
+            hasBody(
+                Search.response,
+                has("results", { it.results },
+                    anyElement(has("name", { it.center },
+                        Matcher("near 48,123")
+                        { it.latitude - 48 < 5 && it.longitude - (-123) < 5 }
+                    ))
+                )
             )
         )
     }

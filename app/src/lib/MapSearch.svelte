@@ -8,10 +8,12 @@
     let text: string
 </script>
 
-<input type="text" bind:value={text} on:change={() => {
+<input type="text" placeholder="🔍 Search UVIC..." bind:value={text} on:change={() => {
     if (text.length > 2) {
         dispatch(Events.Search, {text})
     }
+}} on:dblclick={(event) => {
+    event.stopPropagation();
 }}>
 
 <style>
@@ -31,3 +33,4 @@
     }
 
 </style>
+
