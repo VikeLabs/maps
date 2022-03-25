@@ -56,7 +56,7 @@
         let userLocation = setInterval(() => {
             navigator.geolocation.getCurrentPosition(
                 ({coords: {latitude, longitude}}) => icons.push(L.marker([latitude, longitude]).addTo(map)),
-                err => console.warn(`ERROR(${err.code}): ${err.message}`),
+                err => clearInterval(userLocation),
                 {
                     enableHighAccuracy: true,
                     timeout: 5000,
