@@ -3,7 +3,6 @@ package ca.vikelabs.maps
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import mu.KotlinLogging
-import org.http4k.core.Filter
 import org.http4k.core.then
 import org.http4k.filter.CorsPolicy
 import org.http4k.filter.ServerFilters
@@ -37,7 +36,8 @@ data class Config(
                 ?: throw Exception("SERVER_PORT must be an integer.")
 
             val hikariConfig = HikariConfig().apply {
-                dataSourceClassName = env.getOrLogAndDefault("DATA_SOURCE_CLASS_NAME", "org.postgresql.ds.PGSimpleDataSource")
+                dataSourceClassName =
+                    env.getOrLogAndDefault("DATA_SOURCE_CLASS_NAME", "org.postgresql.ds.PGSimpleDataSource")
                 username = env.getOrLogAndDefault("DATABASE_USERNAME", "uvic")
                 password = env.getOrLogAndDefault("DATABASE_PASSWORD", "uvic")
                 dataSourceProperties.apply {
@@ -51,14 +51,10 @@ data class Config(
         }
     }
 
-    private val configuredLogger = Filter { next ->
-        { req ->
-            logger.info { req.toMessage() }
-            val response = next(req)
-            logger.info { req.toMessage() }
-            response
-        }
-    }
+    private val configuredLogger = ServerFilters.RequestTracing(
+        { req, _ -> logger.info { req.toMessage() } },
+        { _, resp, _ -> logger.info { resp.toMessage() } }
+    )
 
     private val cors = ServerFilters.Cors(CorsPolicy.UnsafeGlobalPermissive)
 
