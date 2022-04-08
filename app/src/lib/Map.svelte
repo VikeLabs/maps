@@ -9,6 +9,7 @@
 
     let map: L.Map
     let searchbar = new L.Control({position: 'topleft'})
+    $: suggestions = [];
     let mapSearch: MapSearch
     let icons: Marker[] = []
 
@@ -17,7 +18,7 @@
         let searchResponsePromise: CancelablePromise<SearchResponseBody>
         mapSearch = new MapSearch({
             target: div,
-            props: {}
+            props: {suggestions}
         });
 
         mapSearch.$on("search", async ({detail}) => {
@@ -47,6 +48,11 @@
                         .bindTooltip(name))
                 }
             }
+        })
+
+        mapSearch.$on('suggest', async ({detail}) => {
+            suggestions = (await Service.getSuggest(detail.text, 5)).suggestions
+            console.log(suggestions)
         })
 
         return div
